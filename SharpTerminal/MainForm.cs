@@ -233,7 +233,7 @@ namespace SharpTerminal
 				});
 			}, () => {
 				iom.Read();
-				Thread.Sleep(1);
+				Thread.Sleep(10);
 			});
 			readline = new Readline((byte[] bytes) => {
 				uir.Run(() => {
@@ -348,30 +348,11 @@ namespace SharpTerminal
 			Write(bytes.ToArray());
 		}
 		
-		private void SendHex(Button textBox, string text)
+		private void SendHex(TextBox textBox)
 		{
-			errorProvider.SetError(textBox, null);
-			var upper = text.ToUpper();
-			if (Regex.IsMatch(upper, @"[^0-9A-F\s]")) {
-				errorProvider.SetError(textBox, "Invalid HEX chars");
-				return;
-			}
-			
-			var bytes = new List<byte>();
-			var chunks = upper.Split(new char[] { ' ', '\n', '\r' },  
-				             StringSplitOptions.RemoveEmptyEntries);
-			foreach (var chunk in chunks) {
-				if (chunk.Length % 2 == 1) {
-					errorProvider.SetError(textBox, "Odd HEX chars");
-					return;
-				}
-				for (int i = 0; i < chunk.Length; i += 2) {
-					var pair = chunk.Substring(i, 2);
-					var b = Convert.ToByte(pair, 16);
-					bytes.Add(b);
-				}
-			}
-			Write(bytes.ToArray());			
+			var bytes = Hex.Parse(textBox.Text);
+			textBox.Text = Hex.ToString(bytes);
+			Write(bytes);			
 		}
 		
 		void ButtonSendText1Click(object sender, EventArgs e)
@@ -396,27 +377,27 @@ namespace SharpTerminal
 		
 		void ButtonSendHex1Click(object sender, EventArgs e)
 		{
-			SendHex(buttonSendHex1, textBoxHexInput1.Text);
+			SendHex(textBoxHexInput1);
 		}
 		
 		void ButtonSendHex2Click(object sender, EventArgs e)
 		{
-			SendHex(buttonSendHex2, textBoxHexInput2.Text);
+			SendHex(textBoxHexInput2);
 		}
 		
 		void ButtonSendHex3Click(object sender, EventArgs e)
 		{
-			SendHex(buttonSendHex3, textBoxHexInput3.Text);
+			SendHex(textBoxHexInput3);
 		}
 		
 		void ButtonSendHex4Click(object sender, EventArgs e)
 		{
-			SendHex(buttonSendHex4, textBoxHexInput4.Text);
+			SendHex(textBoxHexInput4);
 		}
 		
 		void ButtonSendHexClick(object sender, EventArgs e)
 		{
-			SendHex(buttonSendHex, textBoxHexInput.Text);
+			SendHex(textBoxHexInput);
 		}
 		
 		void ButtonClearClick(object sender, EventArgs e)

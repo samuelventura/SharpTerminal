@@ -56,7 +56,6 @@ namespace SharpTerminal
 		private System.Windows.Forms.Button buttonSendHex2;
 		private System.Windows.Forms.Button buttonSendHex;
 		private System.Windows.Forms.TextBox textBoxHexInput;
-		private System.Windows.Forms.ErrorProvider errorProvider;
 		
 		/// <summary>
 		/// Disposes resources used by the form.
@@ -94,6 +93,8 @@ namespace SharpTerminal
 			this.textBoxHexInput = new System.Windows.Forms.TextBox();
 			this.buttonClear = new System.Windows.Forms.Button();
 			this.buttonClose = new System.Windows.Forms.Button();
+			this.comboBoxReadMode = new System.Windows.Forms.ComboBox();
+			this.comboBoxSendMode = new System.Windows.Forms.ComboBox();
 			this.buttonSendText1 = new System.Windows.Forms.Button();
 			this.buttonSendText2 = new System.Windows.Forms.Button();
 			this.buttonSendText3 = new System.Windows.Forms.Button();
@@ -102,11 +103,9 @@ namespace SharpTerminal
 			this.buttonSendHex4 = new System.Windows.Forms.Button();
 			this.buttonSendHex1 = new System.Windows.Forms.Button();
 			this.buttonSendHex2 = new System.Windows.Forms.Button();
-			this.comboBoxReadMode = new System.Windows.Forms.ComboBox();
 			this.textBoxTextInput1 = new System.Windows.Forms.TextBox();
 			this.textBoxTextInput4 = new System.Windows.Forms.TextBox();
 			this.textBoxTextInput2 = new System.Windows.Forms.TextBox();
-			this.comboBoxSendMode = new System.Windows.Forms.ComboBox();
 			this.textBoxTextInput3 = new System.Windows.Forms.TextBox();
 			this.panelLeft = new System.Windows.Forms.Panel();
 			this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
@@ -130,7 +129,6 @@ namespace SharpTerminal
 			this.textBoxHexInput4 = new System.Windows.Forms.TextBox();
 			this.textBoxHexInput2 = new System.Windows.Forms.TextBox();
 			this.textBoxHexInput3 = new System.Windows.Forms.TextBox();
-			this.errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
 			this.panelLeft.SuspendLayout();
 			this.tableLayoutPanel1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.numericUpDownServerPort)).BeginInit();
@@ -141,7 +139,6 @@ namespace SharpTerminal
 			this.tableLayoutPanel2.SuspendLayout();
 			this.tabPageHex.SuspendLayout();
 			this.tableLayoutPanel3.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.errorProvider)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// checkBoxReadline
@@ -255,7 +252,7 @@ namespace SharpTerminal
 			this.buttonSendHex.Location = new System.Drawing.Point(2, 122);
 			this.buttonSendHex.Margin = new System.Windows.Forms.Padding(2);
 			this.buttonSendHex.Name = "buttonSendHex";
-			this.buttonSendHex.Size = new System.Drawing.Size(258, 26);
+			this.buttonSendHex.Size = new System.Drawing.Size(275, 26);
 			this.buttonSendHex.TabIndex = 6;
 			this.buttonSendHex.Text = "Send";
 			this.toolTip.SetToolTip(this.buttonSendHex, "Send HEX below");
@@ -297,6 +294,39 @@ namespace SharpTerminal
 			this.toolTip.SetToolTip(this.buttonClose, "Close current channel");
 			this.buttonClose.UseVisualStyleBackColor = true;
 			this.buttonClose.Click += new System.EventHandler(this.ButtonCloseClick);
+			// 
+			// comboBoxReadMode
+			// 
+			this.comboBoxReadMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.comboBoxReadMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxReadMode.FormattingEnabled = true;
+			this.comboBoxReadMode.Items.AddRange(new object[] {
+			"Break on NL",
+			"Break on CR"});
+			this.comboBoxReadMode.Location = new System.Drawing.Point(2, 2);
+			this.comboBoxReadMode.Margin = new System.Windows.Forms.Padding(2);
+			this.comboBoxReadMode.Name = "comboBoxReadMode";
+			this.comboBoxReadMode.Size = new System.Drawing.Size(214, 21);
+			this.comboBoxReadMode.TabIndex = 17;
+			this.toolTip.SetToolTip(this.comboBoxReadMode, "Select line separator");
+			this.comboBoxReadMode.SelectedIndexChanged += new System.EventHandler(this.ComboBoxReadModeSelectedIndexChanged);
+			// 
+			// comboBoxSendMode
+			// 
+			this.comboBoxSendMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
+			this.comboBoxSendMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.comboBoxSendMode.FormattingEnabled = true;
+			this.comboBoxSendMode.Items.AddRange(new object[] {
+			"Append CR+NL",
+			"Append CR",
+			"Append NL",
+			"Append Nothing"});
+			this.comboBoxSendMode.Location = new System.Drawing.Point(2, 149);
+			this.comboBoxSendMode.Margin = new System.Windows.Forms.Padding(2);
+			this.comboBoxSendMode.Name = "comboBoxSendMode";
+			this.comboBoxSendMode.Size = new System.Drawing.Size(214, 21);
+			this.comboBoxSendMode.TabIndex = 5;
+			this.toolTip.SetToolTip(this.comboBoxSendMode, "Select line terminator to append to output");
 			// 
 			// buttonSendText1
 			// 
@@ -347,7 +377,7 @@ namespace SharpTerminal
 			this.buttonSendHex3.Location = new System.Drawing.Point(220, 62);
 			this.buttonSendHex3.Margin = new System.Windows.Forms.Padding(2);
 			this.buttonSendHex3.Name = "buttonSendHex3";
-			this.buttonSendHex3.Size = new System.Drawing.Size(40, 26);
+			this.buttonSendHex3.Size = new System.Drawing.Size(57, 26);
 			this.buttonSendHex3.TabIndex = 13;
 			this.buttonSendHex3.Text = "Send";
 			this.buttonSendHex3.UseVisualStyleBackColor = true;
@@ -358,7 +388,7 @@ namespace SharpTerminal
 			this.buttonSendHex4.Location = new System.Drawing.Point(220, 92);
 			this.buttonSendHex4.Margin = new System.Windows.Forms.Padding(2);
 			this.buttonSendHex4.Name = "buttonSendHex4";
-			this.buttonSendHex4.Size = new System.Drawing.Size(40, 26);
+			this.buttonSendHex4.Size = new System.Drawing.Size(57, 26);
 			this.buttonSendHex4.TabIndex = 15;
 			this.buttonSendHex4.Text = "Send";
 			this.buttonSendHex4.UseVisualStyleBackColor = true;
@@ -369,7 +399,7 @@ namespace SharpTerminal
 			this.buttonSendHex1.Location = new System.Drawing.Point(220, 2);
 			this.buttonSendHex1.Margin = new System.Windows.Forms.Padding(2);
 			this.buttonSendHex1.Name = "buttonSendHex1";
-			this.buttonSendHex1.Size = new System.Drawing.Size(40, 26);
+			this.buttonSendHex1.Size = new System.Drawing.Size(57, 26);
 			this.buttonSendHex1.TabIndex = 7;
 			this.buttonSendHex1.Text = "Send";
 			this.buttonSendHex1.UseVisualStyleBackColor = true;
@@ -380,27 +410,11 @@ namespace SharpTerminal
 			this.buttonSendHex2.Location = new System.Drawing.Point(220, 32);
 			this.buttonSendHex2.Margin = new System.Windows.Forms.Padding(2);
 			this.buttonSendHex2.Name = "buttonSendHex2";
-			this.buttonSendHex2.Size = new System.Drawing.Size(40, 26);
+			this.buttonSendHex2.Size = new System.Drawing.Size(57, 26);
 			this.buttonSendHex2.TabIndex = 12;
 			this.buttonSendHex2.Text = "Send";
 			this.buttonSendHex2.UseVisualStyleBackColor = true;
 			this.buttonSendHex2.Click += new System.EventHandler(this.ButtonSendHex2Click);
-			// 
-			// comboBoxReadMode
-			// 
-			this.comboBoxReadMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.comboBoxReadMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxReadMode.FormattingEnabled = true;
-			this.comboBoxReadMode.Items.AddRange(new object[] {
-			"Break on NL",
-			"Break on CR"});
-			this.comboBoxReadMode.Location = new System.Drawing.Point(2, 2);
-			this.comboBoxReadMode.Margin = new System.Windows.Forms.Padding(2);
-			this.comboBoxReadMode.Name = "comboBoxReadMode";
-			this.comboBoxReadMode.Size = new System.Drawing.Size(214, 21);
-			this.comboBoxReadMode.TabIndex = 17;
-			this.toolTip.SetToolTip(this.comboBoxReadMode, "Select line separator");
-			this.comboBoxReadMode.SelectedIndexChanged += new System.EventHandler(this.ComboBoxReadModeSelectedIndexChanged);
 			// 
 			// textBoxTextInput1
 			// 
@@ -428,23 +442,6 @@ namespace SharpTerminal
 			this.textBoxTextInput2.Name = "textBoxTextInput2";
 			this.textBoxTextInput2.Size = new System.Drawing.Size(214, 20);
 			this.textBoxTextInput2.TabIndex = 11;
-			// 
-			// comboBoxSendMode
-			// 
-			this.comboBoxSendMode.Anchor = System.Windows.Forms.AnchorStyles.Left;
-			this.comboBoxSendMode.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.comboBoxSendMode.FormattingEnabled = true;
-			this.comboBoxSendMode.Items.AddRange(new object[] {
-			"Append CR+NL",
-			"Append CR",
-			"Append NL",
-			"Append Nothing"});
-			this.comboBoxSendMode.Location = new System.Drawing.Point(2, 149);
-			this.comboBoxSendMode.Margin = new System.Windows.Forms.Padding(2);
-			this.comboBoxSendMode.Name = "comboBoxSendMode";
-			this.comboBoxSendMode.Size = new System.Drawing.Size(214, 21);
-			this.comboBoxSendMode.TabIndex = 5;
-			this.toolTip.SetToolTip(this.comboBoxSendMode, "Select line terminator to append to output");
 			// 
 			// textBoxTextInput3
 			// 
@@ -766,10 +763,6 @@ namespace SharpTerminal
 			this.textBoxHexInput3.Size = new System.Drawing.Size(214, 20);
 			this.textBoxHexInput3.TabIndex = 14;
 			// 
-			// errorProvider
-			// 
-			this.errorProvider.ContainerControl = this;
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -799,7 +792,6 @@ namespace SharpTerminal
 			this.tabPageHex.PerformLayout();
 			this.tableLayoutPanel3.ResumeLayout(false);
 			this.tableLayoutPanel3.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.errorProvider)).EndInit();
 			this.ResumeLayout(false);
 
 		}

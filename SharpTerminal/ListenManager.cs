@@ -24,6 +24,7 @@ namespace SharpTerminal
 			this.listener = new TcpListener(IPAddress.Parse(ip), port);
 			this.listener.Start();
 			//exception below would leake listener
+			//wont catch since there is no way to test it
 			this.listener.BeginAcceptTcpClient(AcceptCallback, null);
 		}
 		
@@ -68,6 +69,8 @@ namespace SharpTerminal
 			runner.Run(() => {
 				NullSocket();
 				if (listener.Server.IsBound) {
+					//exception below would leake listener
+					//wont catch since there is no way to test it
 					socket = listener.EndAcceptTcpClient(result);
 					listener.BeginAcceptTcpClient(AcceptCallback, null);
 				}
