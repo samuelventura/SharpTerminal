@@ -1,8 +1,11 @@
 ﻿<?xml version="1.0"?>
 <?define VERSION=!(bind.FileVersion.SharpTerminal.exe)?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
-	<Product Id="*" Name="SharpTerminal $(var.VERSION)" Language="1033" Version="$(var.VERSION)" UpgradeCode="E90ADEFA-169D-494F-B4C3-E6CD751A30AB" Manufacturer="Samuel Ventura">
-		<Package Description="Serial and Socket Terminal" Comments="Comments" InstallerVersion="200" Compressed="yes" />
+	<Product Id="*" Name="SharpTerminal $(var.VERSION)" Language="1033" 
+	         Version="$(var.VERSION)" UpgradeCode="E90ADEFA-169D-494F-B4C3-E6CD751A30AB" 
+	         Manufacturer="Samuel Ventura">
+		<Package Description="Serial and Socket Terminal" Comments="SharpTerminal is a registered trademark of Yeico" 
+		         InstallerVersion="200" Compressed="yes" />
 		<Icon Id="icon.ico" SourceFile="$(var.SharpTerminal.ProjectDir)\icon.ico" />
 		<Property Id="ARPPRODUCTICON" Value="icon.ico" />
 		<!--
