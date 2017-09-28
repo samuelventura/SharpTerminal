@@ -137,9 +137,10 @@ namespace SharpTerminal
 			#if DEBUG
 			return Exe.Relative(Exe.Filename() + ".xml");
 			#else
-			var path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-			Directory.CreateDirectory(Path.Combine(path, Exe.Filename()));
-			return Path.Combine(path, Exe.Filename(), "config.xml");
+			var path = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile);
+			var folder = Path.Combine(path, "." + Exe.Filename());
+			Directory.CreateDirectory(folder);
+			return Path.Combine(folder, "config.xml");
 			#endif
 		}
 		
@@ -196,26 +197,20 @@ namespace SharpTerminal
 		{
 			var enable = checkBoxReadline.Checked && tabControl.SelectedTab != tabPageHex;
 			var separator = comboBoxReadMode.SelectedIndex < 1 ? (byte)0x0a : (byte)0x0d;
-			ior.Run(() => {
-				readline.Setup(enable, separator);
-			});
+			ior.Run(() => readline.Setup(enable, separator));
 		}
 		
 		private void Write(byte[] bytes)
 		{
 			Log('>', bytes);
-			ior.Run(() => {
-				iom.Write(bytes);
-			});
+			ior.Run(() => iom.Write(bytes));
 		}
 		
 		private void IoClose()
 		{
 			Disposer.Dispose(iom);
 			iom = new NopManager();
-			uir.Run(() => {
-				EnableControls(true);               	        	
-			});
+			uir.Run(() => EnableControls(true));
 		}
 		
 		void MainFormFormClosed(object sender, FormClosedEventArgs e)
@@ -228,18 +223,12 @@ namespace SharpTerminal
 			uir = new ControlRunner(this);
 			ior = new ThreadRunner("IO", (Exception ex) => {
 				IoClose();
-				uir.Run(() => {
-					Log("error", "Error: {0}", ex.Message);
-				});
+				uir.Run(() => Log("error", "Error: {0}", ex.Message));
 			}, () => {
 				iom.Read();
 				Thread.Sleep(10);
 			});
-			readline = new Readline((byte[] bytes) => {
-				uir.Run(() => {
-					Log('<', bytes);          	        	
-				});	             	
-			});
+			readline = new Readline((byte[] bytes) => uir.Run(() => Log('<', bytes)));
 			Text = string.Format("{0} - {1} https://github.com/samuelventura/SharpTerminal", Text, Exe.VersionString());
 			LoadSettings();
 			if (comboBoxReadMode.SelectedIndex < 0)
@@ -259,9 +248,7 @@ namespace SharpTerminal
 			EnableControls(false);
 			ior.Run(() => {
 				iom = new SerialManager(name, serial, readline);
-				uir.Run(() => {
-					Log("success", "Serial {0}@{1} open", name, serial.BaudRate);
-				});		
+				uir.Run(() => Log("success", "Serial {0}@{1} open", name, serial.BaudRate));		
 			});
 		}
 		
@@ -272,9 +259,7 @@ namespace SharpTerminal
 			EnableControls(false);
 			ior.Run(() => {
 				iom = new SocketManager(host, port, readline);
-				uir.Run(() => {
-					Log("success", "Socket {0}:{1} open", host, port);
-				});
+				uir.Run(() => Log("success", "Socket {0}:{1} open", host, port));
 			});			
 		}
 		
@@ -285,9 +270,7 @@ namespace SharpTerminal
 			EnableControls(false);
 			ior.Run(() => {
 				iom = new ListenManager(ip, port, readline, ior);
-				uir.Run(() => {
-					Log("success", "Listener {0}:{1} open", ip, port);
-				});
+				uir.Run(() => Log("success", "Listener {0}:{1} open", ip, port));
 			});		
 		}
 		
