@@ -4,3 +4,4 @@ C# Serial &amp; Socket Terminal
 ## TODO
 * Multiple persistent named tabs
 * Add more single line textboxes
+* Detect closed sockets
