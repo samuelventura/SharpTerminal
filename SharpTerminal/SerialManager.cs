@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.IO.Ports;
 using SharpTools;
 using SharpToolsUI;
@@ -26,6 +25,7 @@ namespace SharpTerminal
 		
 		public void Read()
 		{
+			//confirmed that unplugging an usb serial adapter excepts on BytesToRead access
 			if (serialPort.BytesToRead > 0) {
 				var bytes = new byte[serialPort.BytesToRead];
 				serialPort.Read(bytes, 0, bytes.Length);

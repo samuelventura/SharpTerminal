@@ -1,78 +1,121 @@
-﻿
-using System;
-using System.Net;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.Threading;
+using System.Net;
+using System.Linq;
 using SharpTools;
 
 namespace SharpTerminal
 {
 	public class ListenManager: IoManager
 	{
-		private readonly TcpListener listener;
+		private readonly ConcurrentQueue<byte[]> input;
+		private readonly ConcurrentQueue<byte[]> output;
+		private readonly Task accepter;
 		private readonly Readline readline;
-		private readonly IRunner runner;
-		private readonly IRunner catcher;
-		private TcpClient socket;
+		
+		private TcpListener listener;
 		
 		public ListenManager(string ip, int port, Readline readline, IRunner runner)
 		{
 			this.readline = readline;
-			this.runner = runner;
-			this.catcher = new WrapRunner((ex) => NullSocket());
-			this.listener = new TcpListener(IPAddress.Parse(ip), port);
-			this.listener.Start();
-			//exception below would leake listener
-			//wont catch since there is no way to test it
-			this.listener.BeginAcceptTcpClient(AcceptCallback, null);
+			
+			input = new ConcurrentQueue<byte[]>();
+			output = new ConcurrentQueue<byte[]>();
+			listener = new TcpListener(IPAddress.Parse(ip), port);
+			listener.Start();
+			
+			accepter = Task.Factory.StartNew(AcceptLoop, TaskCreationOptions.LongRunning);
 		}
 		
 		public void Dispose()
 		{
 			Disposer.Close(listener);
-			NullSocket();
 		}
 		
 		public void Read()
 		{
-			if (socket != null) {
-				catcher.Run(() => {
-					var stream = socket.GetStream();
-					if (socket.Available > 0) {
-						var bytes = new byte[socket.Available];
-						stream.Read(bytes, 0, bytes.Length);
-						readline.Append(bytes);
-					}
-				});
+			//newer versions have the Active property
+			if (listener == null) throw new Exception("Closed");
+			byte[] data;
+			if (input.TryDequeue(out data)) {
+				readline.Append(data);
 			}
 		}
 		
 		public void Write(byte[] bytes)
 		{
-			if (socket != null) {
-				catcher.Run(() => {
-					var stream = socket.GetStream();
-					stream.Write(bytes, 0, bytes.Length);
-				});
+			output.Enqueue(bytes);
+		}
+		
+		private void AcceptLoop()
+		{
+			TcpClient current = null;
+			Task reader = null;
+			Task writer = null;
+			
+			var disposer = new Disposer();
+			//newer versions have the Active property
+			disposer.Add(()=> {listener = null;});
+			disposer.Add(listener.Stop);
+			disposer.Add(() => Disposer.Dispose(reader));
+			disposer.Add(() => Disposer.Dispose(writer));
+			disposer.Add(() => Disposer.Dispose(current));
+			
+			using (disposer)
+			{
+				while(true)
+				{
+					var client = listener.AcceptTcpClient();
+					Disposer.Dispose(current);
+					Disposer.Dispose(reader);
+					Disposer.Dispose(writer);
+					current = client;
+					ClearOutput();
+					reader = Task.Factory.StartNew(()=>ReadLoop(client), TaskCreationOptions.LongRunning);
+					writer = Task.Factory.StartNew(()=>WriteLoop(client), TaskCreationOptions.LongRunning);
+				}
 			}
 		}
 		
-		private void NullSocket()
+		private void WriteLoop(TcpClient socket)
 		{
-			Disposer.Dispose(socket);
-			socket = null;
+			using(socket)
+			{
+				while(socket.Connected)
+				{
+					byte[] bytes;
+					if (output.TryDequeue(out bytes)) {
+						var stream = socket.GetStream();
+						stream.Write(bytes, 0, bytes.Length);
+					} else Thread.Sleep(10);
+				}
+			}
 		}
 		
-		private void AcceptCallback(IAsyncResult result)
+		private void ReadLoop(TcpClient socket)
 		{
-			runner.Run(() => {
-				NullSocket();
-				if (listener.Server.IsBound) {
-					//exception below would leake listener
-					//wont catch since there is no way to test it
-					socket = listener.EndAcceptTcpClient(result);
-					listener.BeginAcceptTcpClient(AcceptCallback, null);
-				}
-			});
+			using (socket)
+			{
+				var bytes = new byte[4096];
+				while(true)
+				{
+					//read/write timeout would break blocking access
+					var count = socket.GetStream().Read(bytes, 0, bytes.Length);
+					if (count <= 0) return;
+					var data = new byte[count];
+					Array.Copy(bytes, data, count);
+					input.Enqueue(data);
+				}			
+			}
+		}
+		
+		private void ClearOutput()
+		{
+			byte[] bytes;
+			while (output.TryDequeue(out bytes));
 		}
 	}
 }

@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
@@ -82,6 +81,9 @@ namespace SharpTerminal
 					break;
 				case "error":
 					color = Color.OrangeRed;
+					break;
+				case "warn":
+					color = Color.Yellow;
 					break;
 			}
 			richTextBoxLog.SelectionLength = 0; //clear selection
@@ -217,6 +219,9 @@ namespace SharpTerminal
 		{
 			IoClose();
 			uir.Run(() => Log("error", "Error: {0}", ex.Message));			
+			#if DEBUG
+			uir.Run(() => Log("warn", "Error: {0}", ex.ToString()));
+			#endif
 		}
 		
 		private void IoIdle()
