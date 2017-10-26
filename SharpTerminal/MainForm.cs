@@ -213,6 +213,23 @@ namespace SharpTerminal
 			uir.Run(() => EnableControls(true));
 		}
 		
+		private void IoException(Exception ex)
+		{
+			IoClose();
+			uir.Run(() => Log("error", "Error: {0}", ex.Message));			
+		}
+		
+		private void IoIdle()
+		{
+			iom.Read();
+			Thread.Sleep(10);
+		}
+		
+		private void IoMonitor(byte[] bytes)
+		{
+			uir.Run(() => Log('<', bytes));
+		}
+		
 		void MainFormFormClosed(object sender, FormClosedEventArgs e)
 		{
 			SaveSettings();
@@ -221,22 +238,13 @@ namespace SharpTerminal
 		void MainFormLoad(object sender, EventArgs e)
 		{
 			uir = new ControlRunner(this);
-			ior = new ThreadRunner("IO", (Exception ex) => {
-				IoClose();
-				uir.Run(() => Log("error", "Error: {0}", ex.Message));
-			}, () => {
-				iom.Read();
-				Thread.Sleep(10);
-			});
-			readline = new Readline((byte[] bytes) => uir.Run(() => Log('<', bytes)));
+			ior = new ThreadRunner("IO", IoException, IoIdle);
+			readline = new Readline(IoMonitor);
 			Text = string.Format("{0} - {1} https://github.com/samuelventura/SharpTerminal", Text, Exe.VersionString());
 			LoadSettings();
-			if (comboBoxReadMode.SelectedIndex < 0)
-				comboBoxReadMode.SelectedIndex = 0;
-			if (comboBoxSendMode.SelectedIndex < 0)
-				comboBoxSendMode.SelectedIndex = 0;
-			if (comboBoxServerIP.SelectedIndex < 0)
-				comboBoxServerIP.SelectedIndex = 0;
+			if (comboBoxReadMode.SelectedIndex < 0) comboBoxReadMode.SelectedIndex = 0;
+			if (comboBoxSendMode.SelectedIndex < 0) comboBoxSendMode.SelectedIndex = 0;
+			if (comboBoxServerIP.SelectedIndex < 0) comboBoxServerIP.SelectedIndex = 0;
 			RefreshSerials();
 			EnableControls(true);
 			UpdateReadline();
@@ -276,9 +284,7 @@ namespace SharpTerminal
 		
 		void ButtonCloseClick(object sender, EventArgs e)
 		{
-			ior.Run(() => {
-				IoClose();
-			});
+			ior.Run(IoClose);
 		}
 		
 		void LinkLabelSerialLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

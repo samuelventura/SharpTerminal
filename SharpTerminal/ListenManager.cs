@@ -18,9 +18,7 @@ namespace SharpTerminal
 		{
 			this.readline = readline;
 			this.runner = runner;
-			this.catcher = new WrapRunner((ex) => {
-				NullSocket();
-			});
+			this.catcher = new WrapRunner((ex) => NullSocket());
 			this.listener = new TcpListener(IPAddress.Parse(ip), port);
 			this.listener.Start();
 			//exception below would leake listener
