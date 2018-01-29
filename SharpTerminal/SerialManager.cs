@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO.Ports;
-using SharpTools;
-using SharpToolsUI;
+using SharpTerminal.Tools;
 
 namespace SharpTerminal
 {
@@ -21,9 +20,14 @@ namespace SharpTerminal
 		public void Dispose()
 		{
 			Disposer.Dispose(serialPort);
-		}
-		
-		public void Read()
+        }
+
+        public string Name
+        {
+            get { return string.Format("{0}@{1}", serialPort.PortName, serialPort.BaudRate); }
+        }
+
+        public void Read()
 		{
 			//confirmed that unplugging an usb serial adapter excepts on BytesToRead access
 			if (serialPort.BytesToRead > 0) {

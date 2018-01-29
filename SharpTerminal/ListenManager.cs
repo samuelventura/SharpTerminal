@@ -4,8 +4,7 @@ using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Threading;
 using System.Net;
-using System.Linq;
-using SharpTools;
+using SharpTerminal.Tools;
 
 namespace SharpTerminal
 {
@@ -15,6 +14,7 @@ namespace SharpTerminal
 		private readonly ConcurrentQueue<byte[]> output;
 		private readonly Task accepter;
 		private readonly Readline readline;
+        private readonly EndPoint endpoint;
 		
 		private TcpListener listener;
 		
@@ -26,24 +26,30 @@ namespace SharpTerminal
 			output = new ConcurrentQueue<byte[]>();
 			listener = new TcpListener(IPAddress.Parse(ip), port);
 			listener.Start();
-			
-			accepter = Task.Factory.StartNew(AcceptLoop, TaskCreationOptions.LongRunning);
+            endpoint = listener.LocalEndpoint;
+
+            accepter = Task.Factory.StartNew(AcceptLoop, TaskCreationOptions.LongRunning);
 		}
 		
 		public void Dispose()
 		{
 			Disposer.Close(listener);
 		}
+
+        public string Name
+        {
+            get { return endpoint.ToString(); }
+        }
 		
 		public void Read()
 		{
 			//newer versions have the Active property
 			if (listener == null) throw new Exception("Closed");
-			byte[] data;
-			if (input.TryDequeue(out data)) {
-				readline.Append(data);
-			}
-		}
+            if (input.TryDequeue(out byte[] data))
+            {
+                readline.Append(data);
+            }
+        }
 		
 		public void Write(byte[] bytes)
 		{
@@ -86,12 +92,13 @@ namespace SharpTerminal
 			{
 				while(socket.Connected)
 				{
-					byte[] bytes;
-					if (output.TryDequeue(out bytes)) {
-						var stream = socket.GetStream();
-						stream.Write(bytes, 0, bytes.Length);
-					} else Thread.Sleep(10);
-				}
+                    if (output.TryDequeue(out byte[] bytes))
+                    {
+                        var stream = socket.GetStream();
+                        stream.Write(bytes, 0, bytes.Length);
+                    }
+                    else Thread.Sleep(10);
+                }
 			}
 		}
 		
@@ -114,8 +121,7 @@ namespace SharpTerminal
 		
 		private void ClearOutput()
 		{
-			byte[] bytes;
-			while (output.TryDequeue(out bytes));
-		}
+            while (output.TryDequeue(out byte[] bytes)) ;
+        }
 	}
 }

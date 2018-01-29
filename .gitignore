@@ -1,4 +1,6 @@
 bin
 obj
 packages
+Output
 .DS_Store
+.vs

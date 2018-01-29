@@ -2,8 +2,8 @@
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using System.Net.Sockets;
-using System.Linq;
-using SharpTools;
+using System.Net;
+using SharpTerminal.Tools;
 
 namespace SharpTerminal
 {
@@ -12,7 +12,8 @@ namespace SharpTerminal
 		private readonly ConcurrentQueue<byte[]> queue;
 		private readonly TcpClient socket;
 		private readonly Readline readline;
-		private readonly Task reader;
+        private readonly EndPoint endpoint;
+        private readonly Task reader;
 		
 		public SocketManager(string host, int port, Readline readline)
 		{
@@ -20,8 +21,9 @@ namespace SharpTerminal
 			
 			queue = new ConcurrentQueue<byte[]>();
 			//standalone app may be closed anytime so long timeout
-			socket = Tcp.ConnectWithTimeout(host, port, 1000);
-			socket.SendTimeout = 1000;
+			socket = Sockets.ConnectWithTimeout(host, port, 1000);
+            endpoint = socket.Client.RemoteEndPoint;
+            socket.SendTimeout = 1000;
 			
 			reader = Task.Factory.StartNew(ReadLoop, TaskCreationOptions.LongRunning);
 		}
@@ -29,13 +31,17 @@ namespace SharpTerminal
 		public void Dispose()
 		{
 			Disposer.Dispose(socket);
-		}
-		
-		public void Read()
+        }
+
+        public string Name
+        {
+            get { return endpoint.ToString(); }
+        }
+
+        public void Read()
 		{
 			if (!socket.Connected) throw new Exception("Closed");
-			byte[] data;
-			if (queue.TryDequeue(out data)) {
+			if (queue.TryDequeue(out var data)) {
 				readline.Append(data);
 			}
 		}

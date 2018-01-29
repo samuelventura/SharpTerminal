@@ -44,34 +44,34 @@
     <DefineConstants>TRACE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SharpTools">
-      <HintPath>..\packages\SharpTools.1.0.6\lib\net40\SharpTools.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpToolsUI">
-      <HintPath>..\packages\SharpToolsUI.1.0.5\lib\net40\SharpToolsUI.dll</HintPath>
+    <Reference Include="LiteDB, Version=4.1.1.0, Culture=neutral, PublicKeyToken=4ee40123013c9f27, processorArchitecture=MSIL">
+      <HintPath>..\packages\LiteDB.4.1.1\lib\net40\LiteDB.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ListenManager.cs" />
     <Compile Include="Readline.cs" />
     <Compile Include="IoManager.cs" />
     <Compile Include="NopManager.cs" />
-    <Compile Include="PersistedSettings.cs" />
-    <Compile Include="MainForm.cs" />
+    <Compile Include="RenameForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="RenameForm.Designer.cs">
+      <DependentUpon>RenameForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SessionDao.cs" />
+    <Compile Include="SessionSettings.cs" />
+    <Compile Include="MainForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
@@ -79,6 +79,27 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialManager.cs" />
     <Compile Include="SocketManager.cs" />
+    <Compile Include="TerminalControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="TerminalControl.Designer.cs">
+      <DependentUpon>TerminalControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\ControlRunner.cs" />
+    <Compile Include="Tools\Disposer.cs" />
+    <Compile Include="Tools\Executable.cs" />
+    <Compile Include="Tools\Hexadecimal.cs" />
+    <Compile Include="Tools\Named.cs" />
+    <Compile Include="Tools\Runner.cs" />
+    <Compile Include="Tools\SerialSettings.cs" />
+    <Compile Include="Tools\SerialSettingsForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tools\SerialSettingsForm.designer.cs">
+      <DependentUpon>SerialSettingsForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\Sockets.cs" />
+    <Compile Include="Tools\Thrower.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -88,6 +109,19 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="RenameForm.resx">
+      <DependentUpon>RenameForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="TerminalControl.resx">
+      <DependentUpon>TerminalControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\SerialSettingsForm.resx">
+      <DependentUpon>SerialSettingsForm.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="icon.ico" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
