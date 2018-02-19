@@ -98,12 +98,12 @@ namespace SharpTerminal
         {
             config.Serial.CopyTo(serial);
             comboBoxSerial.Text = config.PortName;
-            textBoxClientHost.Text = config.ClientHost;
             numericUpDownClientPort.Value = config.ClientPort;
-            comboBoxServerIP.Text = config.ServerIP;
             numericUpDownServerPort.Value = config.ServerPort;
-            comboBoxSendMode.Text = config.SendMode;
-            comboBoxReadMode.Text = config.ReadMode;
+            if (config.ClientHost != null) textBoxClientHost.Text = config.ClientHost;
+            if (config.ServerIP != null) comboBoxServerIP.Text = config.ServerIP;
+            if (config.SendMode != null) comboBoxSendMode.Text = config.SendMode;
+            if (config.ReadMode != null) comboBoxReadMode.Text = config.ReadMode;
             checkBoxReadline.Checked = config.Readline;
             textBoxTextInput.Text = config.Text;
             textBoxTextInput1.Text = config.Text1;
@@ -267,9 +267,18 @@ namespace SharpTerminal
 
         private void UpdateReadline()
         {
-            var enable = checkBoxReadline.Checked && tabControl.SelectedTab != tabPageHex;
-            var separator = comboBoxReadMode.SelectedIndex < 1 ? (byte)0x0a : (byte)0x0d;
-            ior.Run(() => readline.Setup(enable, separator));
+            var enable = checkBoxReadline.Checked && comboBoxReadMode.SelectedIndex >= 0 && tabControl.SelectedTab != tabPageHex;
+            var separator = 0x00;
+            switch (comboBoxReadMode.Text)
+            {
+                case "Break on NL":
+                    separator = 0x0a;
+                    break;
+                case "Break on CR":
+                    separator = 0x0d;
+                    break;
+            }
+            ior.Run(() => readline.Setup(enable, (byte)separator));
         }
 
         private void Write(byte[] bytes)
@@ -325,6 +334,7 @@ namespace SharpTerminal
             if (comboBoxReadMode.SelectedIndex < 0) comboBoxReadMode.SelectedIndex = 0;
             if (comboBoxSendMode.SelectedIndex < 0) comboBoxSendMode.SelectedIndex = 0;
             if (comboBoxServerIP.SelectedIndex < 0) comboBoxServerIP.SelectedIndex = 0;
+            if (string.IsNullOrWhiteSpace(textBoxClientHost.Text)) textBoxClientHost.Text = "127.0.0.1";
             RefreshSerials();
             EnableControls(true);
             UpdateReadline();

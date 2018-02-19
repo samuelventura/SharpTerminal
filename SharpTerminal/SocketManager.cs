@@ -31,6 +31,7 @@ namespace SharpTerminal
 		public void Dispose()
 		{
 			Disposer.Dispose(socket);
+            Disposer.Dispose(reader);
         }
 
         public string Name
@@ -40,11 +41,11 @@ namespace SharpTerminal
 
         public void Read()
 		{
-			if (!socket.Connected) throw new Exception("Closed");
-			if (queue.TryDequeue(out var data)) {
+			while (queue.TryDequeue(out var data)) {
 				readline.Append(data);
 			}
-		}
+			if (!socket.Connected) Thrower.Throw("Socket closed unexpectedly");
+        }
 		
 		public void Write(byte[] bytes)
 		{
@@ -57,9 +58,9 @@ namespace SharpTerminal
 			using (socket)
 			{
 				var bytes = new byte[4096];
+
 				while(true)
 				{
-					//read/write timeout would break blocking access
 					var count = socket.GetStream().Read(bytes, 0, bytes.Length);
 					if (count <= 0) return;
 					var data = new byte[count];

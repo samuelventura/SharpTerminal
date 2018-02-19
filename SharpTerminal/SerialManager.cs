@@ -1,45 +1,71 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Threading.Tasks;
 using System.IO.Ports;
 using SharpTerminal.Tools;
 
 namespace SharpTerminal
 {
 	public class SerialManager: IoManager
-	{
-		private readonly SerialPort serialPort;
+    {
+        private readonly ConcurrentQueue<byte[]> queue;
+        private readonly SerialPort serial;
 		private readonly Readline readline;
-		
-		public SerialManager(string name, SerialSettings settings, Readline readline)
+        private readonly Task reader;
+
+        public SerialManager(string name, SerialSettings settings, Readline readline)
 		{
 			this.readline = readline;
-			serialPort = new SerialPort(name);
-			settings.CopyTo(serialPort);
-			serialPort.Open();
-		}
+
+            queue = new ConcurrentQueue<byte[]>();
+            serial = new SerialPort(name);
+			settings.CopyTo(serial);
+			serial.Open();
+
+            reader = Task.Factory.StartNew(ReadLoop, TaskCreationOptions.LongRunning);
+        }
 		
 		public void Dispose()
 		{
-			Disposer.Dispose(serialPort);
+			Disposer.Dispose(serial);
+            Disposer.Dispose(reader);
         }
 
         public string Name
         {
-            get { return string.Format("{0}@{1}", serialPort.PortName, serialPort.BaudRate); }
+            get { return string.Format("{0}@{1}", serial.PortName, serial.BaudRate); }
         }
 
         public void Read()
 		{
-			//confirmed that unplugging an usb serial adapter excepts on BytesToRead access
-			if (serialPort.BytesToRead > 0) {
-				var bytes = new byte[serialPort.BytesToRead];
-				serialPort.Read(bytes, 0, bytes.Length);
-				readline.Append(bytes);
-			}
-		}
-		
-		public void Write(byte[] bytes)
+            //confirmed that unplugging an usb serial adapter excepts on BytesToRead access
+            while (queue.TryDequeue(out var data))
+            {
+                readline.Append(data);
+            }
+            if (!serial.IsOpen) Thrower.Throw("Serial closed unexpectedly");
+        }
+
+        public void Write(byte[] bytes)
 		{
-			serialPort.Write(bytes, 0, bytes.Length);
-		}
-	}
+			serial.Write(bytes, 0, bytes.Length);
+        }
+
+        private void ReadLoop()
+        {
+            using (serial)
+            {
+                var bytes = new byte[4096];
+
+                while (true)
+                {
+                    var count = serial.Read(bytes, 0, bytes.Length);
+                    if (count <= 0) return;
+                    var data = new byte[count];
+                    Array.Copy(bytes, data, count);
+                    queue.Enqueue(data);
+                }
+            }
+        }
+    }
 }
