@@ -8,32 +8,30 @@ namespace SharpTerminal.Tools
     {
         public static void Dispose(object any)
         {
-            Execute(() =>
+            IgnoreException(() =>
             {
-                if (any is IDisposable)
+                if (any is IDisposable disposable)
                 {
-                    var disposable = (IDisposable)any;
                     disposable.Dispose();
                 }
             });
-
         }
 
         // SerialPort, Socket, TcpClient, Streams, Writers, Readers, ...
         public static void Dispose(IDisposable disposable)
         {
-            Execute(() => { disposable?.Dispose(); });
+            IgnoreException(() => { disposable?.Dispose(); });
         }
 
         // TcpListener
         public static void Close(TcpListener closeable)
         {
-            Execute(() => { closeable?.Stop(); });
+            IgnoreException(() => { closeable?.Stop(); });
         }
 
-        private static void Execute(Action action)
+        public static void IgnoreException(Action action)
         {
-            try { action(); } catch (Exception) { }
+            try { action?.Invoke(); } catch (Exception) { }
         }
 
         private readonly Stack<Action> actions;
@@ -46,7 +44,7 @@ namespace SharpTerminal.Tools
         public void Add(IDisposable disposable)
         {
             actions.Push(() => {
-                disposable.Dispose();
+                disposable?.Dispose();
             });
         }
 
@@ -59,7 +57,7 @@ namespace SharpTerminal.Tools
         {
             while (actions.Count > 0)
             {
-                Execute(actions.Pop());
+                IgnoreException(actions.Pop());
             }
         }
     }

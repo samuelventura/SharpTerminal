@@ -41,9 +41,9 @@ namespace SharpTerminal
             //confirmed that unplugging an usb serial adapter excepts on BytesToRead access
             while (queue.TryDequeue(out var data))
             {
+                if (data.Length == 0) Thrower.Throw("Port EOF");
                 readline.Append(data);
             }
-            if (!serial.IsOpen) Thrower.Throw("Serial closed unexpectedly");
         }
 
         public void Write(byte[] bytes)
@@ -53,8 +53,11 @@ namespace SharpTerminal
 
         private void ReadLoop()
         {
-            using (serial)
+            using (var disposer = new Disposer())
             {
+                disposer.Add(serial);
+                disposer.Add(()=> { queue.Enqueue(new byte[] { }); });
+
                 var bytes = new byte[4096];
 
                 while (true)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Threading;
 using System.Text;
 using System.Windows.Forms;
 using System.IO.Ports;
@@ -297,13 +296,12 @@ namespace SharpTerminal
         private void IoException(Exception ex)
         {
             IoClose();
-            uir.Run(() => Log("error", "Error: {0}", ex.Message));
+            uir.Run(() => Log("error", ex.Message));
         }
 
         private void IoIdle()
         {
             iom.Read();
-            Thread.Sleep(10);
         }
 
         private void IoMonitor(byte[] bytes)
@@ -329,7 +327,7 @@ namespace SharpTerminal
         private void TerminalControl_Load(object sender, EventArgs e)
         {
             uir = new ControlRunner(this);
-            ior = new ThreadRunner("IO", IoException, IoIdle);
+            ior = new ThreadRunner("IO", IoException, IoIdle, 10);
             readline = new Readline(IoMonitor);
             if (comboBoxReadMode.SelectedIndex < 0) comboBoxReadMode.SelectedIndex = 0;
             if (comboBoxSendMode.SelectedIndex < 0) comboBoxSendMode.SelectedIndex = 0;

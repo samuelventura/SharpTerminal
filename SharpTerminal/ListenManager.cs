@@ -12,11 +12,11 @@ namespace SharpTerminal
 	{
 		private readonly ConcurrentQueue<byte[]> input;
 		private readonly ConcurrentQueue<byte[]> output;
-		private readonly Task accepter;
 		private readonly Readline readline;
         private readonly EndPoint endpoint;
-		
-		private TcpListener listener;
+        private readonly Task accepter;
+
+        private TcpListener listener;
 		
 		public ListenManager(string ip, int port, Readline readline, IRunner runner)
 		{
@@ -44,11 +44,11 @@ namespace SharpTerminal
 		
 		public void Read()
 		{
-            while (input.TryDequeue(out byte[] data))
+            while (input.TryDequeue(out var data))
             {
+                if (data.Length == 0) Thrower.Throw("Listener EOF");
                 readline.Append(data);
             }
-            if (listener == null) Thrower.Throw("Listener closed unexpectedly");
         }
 
         public void Write(byte[] bytes)
@@ -64,7 +64,7 @@ namespace SharpTerminal
 			
 			var disposer = new Disposer();
 			//newer versions have the Active property
-			disposer.Add(()=> {listener = null;});
+			disposer.Add(()=> { input.Enqueue(new byte[] { }); });
 			disposer.Add(listener.Stop);
 			disposer.Add(() => Disposer.Dispose(reader));
 			disposer.Add(() => Disposer.Dispose(writer));

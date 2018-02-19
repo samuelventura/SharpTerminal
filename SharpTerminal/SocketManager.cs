@@ -42,9 +42,9 @@ namespace SharpTerminal
         public void Read()
 		{
 			while (queue.TryDequeue(out var data)) {
-				readline.Append(data);
+                if (data.Length == 0) Thrower.Throw("Socket EOF");
+                readline.Append(data);
 			}
-			if (!socket.Connected) Thrower.Throw("Socket closed unexpectedly");
         }
 		
 		public void Write(byte[] bytes)
@@ -55,14 +55,17 @@ namespace SharpTerminal
 		
 		private void ReadLoop()
 		{
-			using (socket)
-			{
-				var bytes = new byte[4096];
+            using (var disposer = new Disposer())
+            {
+                disposer.Add(socket);
+                disposer.Add(() => { queue.Enqueue(new byte[] { }); });
+
+                var bytes = new byte[4096];
 
 				while(true)
 				{
 					var count = socket.GetStream().Read(bytes, 0, bytes.Length);
-					if (count <= 0) return;
+                    if (count <= 0) return;
 					var data = new byte[count];
 					Array.Copy(bytes, data, count);
 					queue.Enqueue(data);

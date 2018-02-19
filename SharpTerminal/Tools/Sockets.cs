@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
+﻿using System.Net.Sockets;
 
 namespace SharpTerminal.Tools
 {
@@ -8,11 +6,7 @@ namespace SharpTerminal.Tools
     {
         public static TcpClient ConnectWithTimeout(string ip, int port, int timeout)
         {
-            return ConnectWithTimeout(new TcpClient(), ip, port, timeout);
-        }
-
-        public static TcpClient ConnectWithTimeout(TcpClient socket, string ip, int port, int timeout)
-        {
+            var socket = new TcpClient();
             var result = socket.BeginConnect(ip, port, null, null);
             if (!result.AsyncWaitHandle.WaitOne(timeout, true))
             {
