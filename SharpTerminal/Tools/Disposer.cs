@@ -29,9 +29,13 @@ namespace SharpTerminal.Tools
             IgnoreException(() => { closeable?.Stop(); });
         }
 
-        public static void IgnoreException(Action action)
+        public static void IgnoreException(Action action, Action<Exception> catcher = null)
         {
-            try { action?.Invoke(); } catch (Exception) { }
+            try { action?.Invoke(); }
+            catch (Exception ex)
+            {
+                if (catcher != null) IgnoreException(() => { catcher(ex); });
+            }
         }
 
         private readonly Stack<Action> actions;
