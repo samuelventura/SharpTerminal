@@ -49,11 +49,6 @@ namespace SharpTerminal
             Link(buttonSendHex12, textBoxHexInput12);
         }
 
-        public void Unload()
-        {
-            ior.Dispose(IoClose);
-        }
-
         public void FromUI(SessionSettings config)
         {
             config.Serial.CopyFrom(serial);
@@ -288,9 +283,18 @@ namespace SharpTerminal
 
         private void IoClose()
         {
-            Disposer.Dispose(iom);
+            //dump tail on close
+            var tail = readline.Tail();
+            if (tail.Length>0) uir.Run(() => Log('<', tail));
+            IoDispose();
             iom = new NopManager();
             uir.Run(() => EnableControls(true));
+        }
+
+        //runner dispose should not call uir
+        private void IoDispose()
+        {
+            Disposer.Dispose(iom);
         }
 
         private void IoException(Exception ex)
@@ -307,6 +311,11 @@ namespace SharpTerminal
         private void IoMonitor(byte[] bytes)
         {
             uir.Run(() => Log('<', bytes));
+        }
+
+        public void Unload()
+        {
+            ior.Dispose(IoDispose);
         }
 
         private void SendText(string text)
