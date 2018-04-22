@@ -9,7 +9,7 @@ namespace SharpTerminal.Tools
         void Run(Action action);
     }
 
-    public class ThreadRunner : IRunner, IDisposable
+    public class ThreadRunner : IRunner
     {
         private readonly Action<Exception> catcher;
         private readonly Queue<Named> queue;
@@ -48,16 +48,16 @@ namespace SharpTerminal.Tools
             Push(new Named("action", action));
         }
 
-        public void Dispose(Action action)
+        public void Dispose(Action action, bool join = true)
         {
             Push(new Named("dispose", action));
-            thread.Join();
+            if (join) thread.Join();
         }
 
-        public void Dispose()
+        public void Dispose(bool join=true)
         {
             Push(new Named("dispose"));
-            thread.Join();
+            if (join) thread.Join();
         }
 
         public void Flush()

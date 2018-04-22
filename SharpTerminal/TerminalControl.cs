@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO.Ports;
+using System.Threading;
 using SharpTerminal.Tools;
 
 namespace SharpTerminal
@@ -283,18 +284,12 @@ namespace SharpTerminal
 
         private void IoClose()
         {
+            Disposer.Dispose(iom);
+            iom = new NopManager();
             //dump tail on close
             var tail = readline.Tail();
-            if (tail.Length>0) uir.Run(() => Log('<', tail));
-            IoDispose();
-            iom = new NopManager();
+            if (tail.Length > 0) uir.Run(() => Log('<', tail));
             uir.Run(() => EnableControls(true));
-        }
-
-        //runner dispose should not call uir
-        private void IoDispose()
-        {
-            Disposer.Dispose(iom);
         }
 
         private void IoException(Exception ex)
@@ -306,6 +301,10 @@ namespace SharpTerminal
         private void IoIdle()
         {
             iom.Read();
+            //flush hex mode buffer
+            readline.Append(new byte[0]);
+            //quick packup period
+            Thread.Sleep(20);
         }
 
         private void IoMonitor(byte[] bytes)
@@ -315,7 +314,7 @@ namespace SharpTerminal
 
         public void Unload()
         {
-            ior.Dispose(IoDispose);
+            ior.Dispose(IoClose, false);
         }
 
         private void SendText(string text)

@@ -59,7 +59,7 @@ namespace SharpTerminal
 	
 		void MainFormLoad(object sender, EventArgs e)
 		{
-			Text = string.Format("SharpTerminal - 1.0.3 https://github.com/samuelventura/SharpTerminal");
+			Text = string.Format("SharpTerminal - 1.0.4 https://github.com/samuelventura/SharpTerminal");
 
             var sessions = dao.Load();
 

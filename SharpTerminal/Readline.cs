@@ -29,16 +29,32 @@ namespace SharpTerminal
         public void Append(byte[] bytes)
         {
             if (!enabled)
-                handler(bytes);
+            {
+                if (bytes.Length > 0)
+                {
+                    foreach (var b in bytes)
+                    {
+                        line.Add(b);
+                    }
+                }
+                else if (line.Count > 0)
+                {
+                    handler(line.ToArray());
+                    line.Clear();
+                }
+            }
             else
-                foreach (var b in bytes) {
+            {
+                foreach (var b in bytes)
+                {
                     line.Add(b);
-                    if (b == separator) {
+                    if (b == separator)
+                    {
                         handler(line.ToArray());
                         line.Clear();
                     }
                 }
-
+            }
         }
 
         public byte[] Tail()
