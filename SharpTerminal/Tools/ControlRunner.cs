@@ -20,11 +20,5 @@ namespace SharpTerminal.Tools
             Action wrapper = () => { Disposer.IgnoreException(action, catcher); };
             control.Invoke(wrapper);
         }
-
-        public void Post(Action action)
-        {
-            Action wrapper = () => { Disposer.IgnoreException(action, catcher); };
-            control.BeginInvoke(wrapper);
-        }
     }
 }

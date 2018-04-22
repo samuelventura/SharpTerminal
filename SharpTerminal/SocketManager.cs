@@ -9,17 +9,14 @@ namespace SharpTerminal
 {
 	public class SocketManager: IoManager
 	{
-		private readonly ConcurrentQueue<byte[]> queue;
-		private readonly TcpClient socket;
-		private readonly Readline readline;
+		private readonly ConcurrentQueue<byte[]> input;
+        private readonly TcpClient socket;
         private readonly EndPoint endpoint;
         private readonly Task reader;
 		
-		public SocketManager(string host, int port, Readline readline)
+		public SocketManager(string host, int port)
 		{
-			this.readline = readline;
-			
-			queue = new ConcurrentQueue<byte[]>();
+			input = new ConcurrentQueue<byte[]>();
 			//standalone app may be closed anytime so long timeout
 			socket = Sockets.ConnectWithTimeout(host, port, 1000);
             endpoint = socket.Client.RemoteEndPoint;
@@ -39,15 +36,17 @@ namespace SharpTerminal
             get { return endpoint.ToString(); }
         }
 
-        public void Read()
-		{
-			while (queue.TryDequeue(out var data)) {
+        public byte[] Read()
+        {
+            if (input.TryDequeue(out byte[] data))
+            {
                 if (data.Length == 0) Thrower.Throw("Socket EOF");
-                readline.Append(data);
-			}
+                return data;
+            }
+            return null;
         }
-		
-		public void Write(byte[] bytes)
+
+        public void Write(byte[] bytes)
 		{
 			var stream = socket.GetStream();
 			stream.Write(bytes, 0, bytes.Length);
@@ -58,7 +57,7 @@ namespace SharpTerminal
             using (var disposer = new Disposer())
             {
                 disposer.Add(socket);
-                disposer.Add(() => { queue.Enqueue(new byte[] { }); });
+                disposer.Add(() => { input.Enqueue(new byte[] { }); });
 
                 var bytes = new byte[4096];
 
@@ -68,7 +67,7 @@ namespace SharpTerminal
                     if (count <= 0) return;
 					var data = new byte[count];
 					Array.Copy(bytes, data, count);
-					queue.Enqueue(data);
+					input.Enqueue(data);
 				}			
 			}
 		}

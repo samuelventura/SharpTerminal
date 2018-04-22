@@ -48,7 +48,7 @@ namespace SharpTerminal.Tools
             Push(new Named("action", action));
         }
 
-        public void Dispose(Action action, bool join = true)
+        public void Dispose(Action action, bool join=true)
         {
             Push(new Named("dispose", action));
             if (join) thread.Join();

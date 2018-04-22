@@ -8,16 +8,13 @@ namespace SharpTerminal
 {
 	public class SerialManager: IoManager
     {
-        private readonly ConcurrentQueue<byte[]> queue;
+        private readonly ConcurrentQueue<byte[]> input;
         private readonly SerialPort serial;
-		private readonly Readline readline;
         private readonly Task reader;
 
-        public SerialManager(string name, SerialSettings settings, Readline readline)
+        public SerialManager(string name, SerialSettings settings)
 		{
-			this.readline = readline;
-
-            queue = new ConcurrentQueue<byte[]>();
+            input = new ConcurrentQueue<byte[]>();
             serial = new SerialPort(name);
 			settings.CopyTo(serial);
 			serial.Open();
@@ -36,14 +33,14 @@ namespace SharpTerminal
             get { return string.Format("{0}@{1}", serial.PortName, serial.BaudRate); }
         }
 
-        public void Read()
-		{
-            //confirmed that unplugging an usb serial adapter excepts on BytesToRead access
-            while (queue.TryDequeue(out var data))
+        public byte[] Read()
+        {
+            if (input.TryDequeue(out byte[] data))
             {
-                if (data.Length == 0) Thrower.Throw("Port EOF");
-                readline.Append(data);
+                if (data.Length == 0) Thrower.Throw("Serial EOF");
+                return data;
             }
+            return null;
         }
 
         public void Write(byte[] bytes)
@@ -56,7 +53,7 @@ namespace SharpTerminal
             using (var disposer = new Disposer())
             {
                 disposer.Add(serial);
-                disposer.Add(()=> { queue.Enqueue(new byte[] { }); });
+                disposer.Add(()=> { input.Enqueue(new byte[] { }); });
 
                 var bytes = new byte[4096];
 
@@ -66,7 +63,7 @@ namespace SharpTerminal
                     if (count <= 0) return;
                     var data = new byte[count];
                     Array.Copy(bytes, data, count);
-                    queue.Enqueue(data);
+                    input.Enqueue(data);
                 }
             }
         }

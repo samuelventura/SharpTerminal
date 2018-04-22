@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO.Ports;
-using System.Threading;
 using SharpTerminal.Tools;
 
 namespace SharpTerminal
@@ -13,8 +11,8 @@ namespace SharpTerminal
     {
         private readonly ASCIIEncoding ascii = new ASCIIEncoding();
         private readonly SerialSettings serial = new SerialSettings();
+        private RichTextBuffer buffer = new RichTextBuffer();
         private IoManager iom = new NopManager();
-        private Readline readline;
         private ThreadRunner ior;
         private ControlRunner uir;
 
@@ -186,41 +184,6 @@ namespace SharpTerminal
             buttonSendHex12.Enabled = !closed;
         }
 
-        private void Log(string type, string format, params object[] args)
-        {
-            if (args.Length > 0)
-                format = string.Format(format, args);
-            var color = Color.White;
-            switch (type)
-            {
-                case "<":
-                    color = Color.DodgerBlue;
-                    break;
-                case ">":
-                    color = Color.Salmon;
-                    break;
-                case "success":
-                    color = Color.LimeGreen;
-                    break;
-                case "error":
-                    color = Color.OrangeRed;
-                    break;
-                case "warn":
-                    color = Color.Yellow;
-                    break;
-            }
-            richTextBoxLog.SelectionLength = 0; //clear selection
-            richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
-            richTextBoxLog.SelectionColor = Color.Gray;
-            richTextBoxLog.AppendText(DateTime.Now.ToString("HH:mm:ss.fff"));
-            richTextBoxLog.SelectionColor = color;
-            richTextBoxLog.AppendText(" ");
-            richTextBoxLog.AppendText(format);
-            richTextBoxLog.AppendText("\n");
-            richTextBoxLog.SelectionStart = richTextBoxLog.Text.Length;
-            richTextBoxLog.ScrollToCaret();
-        }
-
         private void AppendLineEnding(List<byte> bytes)
         {
             var mode = comboBoxSendMode.Text;
@@ -239,31 +202,10 @@ namespace SharpTerminal
             }
         }
 
-        private void Log(char prefix, byte[] bytes)
-        {
-            var sb = new StringBuilder();
-            foreach (var b in bytes)
-            {
-                var c = (char)b;
-                if (Char.IsControl(c))
-                    sb.Append(string.Format("[{0:X2}]", (int)c));
-                else
-                    sb.Append(c);
-            }
-            sb.Append("\n");
-            sb.Append(prefix);
-            foreach (var b in bytes)
-            {
-                sb.Append(b.ToString("X2"));
-                sb.Append(" ");
-            }
-            Log(prefix.ToString(), sb.ToString());
-        }
-
         private void UpdateReadline()
         {
-            var enable = checkBoxReadline.Checked && comboBoxReadMode.SelectedIndex >= 0 && tabControl.SelectedTab != tabPageHex;
-            var separator = 0x00;
+            var readline = checkBoxReadline.Checked && comboBoxReadMode.SelectedIndex >= 0 && tabControl.SelectedTab != tabPageHex;
+            var separator = (byte)0x00;
             switch (comboBoxReadMode.Text)
             {
                 case "Break on NL":
@@ -273,43 +215,32 @@ namespace SharpTerminal
                     separator = 0x0d;
                     break;
             }
-            ior.Run(() => readline.Setup(enable, (byte)separator));
-        }
-
-        private void Write(byte[] bytes)
-        {
-            Log('>', bytes);
-            ior.Run(() => iom.Write(bytes));
+            buffer.Setup(readline, separator);
         }
 
         private void IoClose()
         {
             Disposer.Dispose(iom);
             iom = new NopManager();
-            //dump tail on close
-            var tail = readline.Tail();
-            if (tail.Length > 0) uir.Run(() => Log('<', tail));
+            uir.Run(() => buffer.Flush());
             uir.Run(() => EnableControls(true));
         }
 
         private void IoException(Exception ex)
         {
             IoClose();
-            uir.Run(() => Log("error", ex.Message));
+            uir.Run(() => buffer.Log("error", ex.Message));
         }
 
         private void IoIdle()
         {
-            iom.Read();
-            //flush hex mode buffer
-            readline.Append(new byte[0]);
-            //quick packup period
-            Thread.Sleep(20);
-        }
-
-        private void IoMonitor(byte[] bytes)
-        {
-            uir.Run(() => Log('<', bytes));
+            var data = iom.Read();
+            while (data != null)
+            {
+                uir.Run(() => buffer.Input(data));
+                data = iom.Read();
+            }
+            uir.Run(() => buffer.CheckSilence());
         }
 
         public void Unload()
@@ -319,24 +250,26 @@ namespace SharpTerminal
 
         private void SendText(string text)
         {
-            var bytes = new List<byte>();
-            bytes.AddRange(ascii.GetBytes(text));
-            AppendLineEnding(bytes);
-            Write(bytes.ToArray());
+            var list = new List<byte>();
+            list.AddRange(ascii.GetBytes(text));
+            AppendLineEnding(list);
+            var bytes = list.ToArray();
+            buffer.Output(bytes, true);
+            ior.Run(() => iom.Write(bytes));
         }
 
         private void SendHex(TextBox textBox)
         {
             var bytes = Hexadecimal.Parse(textBox.Text);
             textBox.Text = Hexadecimal.ToString(bytes);
-            Write(bytes);
+            buffer.Output(bytes, false);
+            ior.Run(() => iom.Write(bytes));
         }
 
         private void TerminalControl_Load(object sender, EventArgs e)
         {
             uir = new ControlRunner(this);
             ior = new ThreadRunner("IO", IoException, IoIdle, 10);
-            readline = new Readline(IoMonitor);
             if (comboBoxReadMode.SelectedIndex < 0) comboBoxReadMode.SelectedIndex = 0;
             if (comboBoxSendMode.SelectedIndex < 0) comboBoxSendMode.SelectedIndex = 0;
             if (comboBoxServerIP.SelectedIndex < 0) comboBoxServerIP.SelectedIndex = 0;
@@ -344,6 +277,7 @@ namespace SharpTerminal
             RefreshSerials();
             EnableControls(true);
             UpdateReadline();
+            timer.Enabled = true;
         }
 
         private void LinkLabelSerial_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -363,8 +297,8 @@ namespace SharpTerminal
             var name = comboBoxSerial.Text;
             EnableControls(false);
             ior.Run(() => {
-                iom = new SerialManager(name, serial, readline);
-                uir.Run(() => Log("success", "Serial {0} open", iom.Name));
+                iom = new SerialManager(name, serial);
+                uir.Run(() => buffer.Log("success", "Serial {0} open", iom.Name));
             });
         }
 
@@ -374,8 +308,8 @@ namespace SharpTerminal
             var port = (int)numericUpDownClientPort.Value;
             EnableControls(false);
             ior.Run(() => {
-                iom = new SocketManager(host, port, readline);
-                uir.Run(() => Log("success", "Socket {0} open", iom.Name));
+                iom = new SocketManager(host, port);
+                uir.Run(() => buffer.Log("success", "Socket {0} open", iom.Name));
             });
         }
 
@@ -385,8 +319,8 @@ namespace SharpTerminal
             var port = (int)numericUpDownServerPort.Value;
             EnableControls(false);
             ior.Run(() => {
-                iom = new ListenManager(ip, port, readline, ior);
-                uir.Run(() => Log("success", "Listener {0} open", iom.Name));
+                iom = new ListenManager(ip, port, ior);
+                uir.Run(() => buffer.Log("success", "Listener {0} open", iom.Name));
             });
         }
 
@@ -456,6 +390,11 @@ namespace SharpTerminal
         private void ComboBoxReadMode_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateReadline();
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            buffer.Update(richTextBoxLog);
         }
     }
 }

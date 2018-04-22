@@ -12,16 +12,13 @@ namespace SharpTerminal
 	{
 		private readonly ConcurrentQueue<byte[]> input;
 		private readonly ConcurrentQueue<byte[]> output;
-		private readonly Readline readline;
         private readonly EndPoint endpoint;
         private readonly Task accepter;
 
         private TcpListener listener;
 		
-		public ListenManager(string ip, int port, Readline readline, IRunner runner)
+		public ListenManager(string ip, int port, IRunner runner)
 		{
-			this.readline = readline;
-			
 			input = new ConcurrentQueue<byte[]>();
 			output = new ConcurrentQueue<byte[]>();
 			listener = new TcpListener(IPAddress.Parse(ip), port);
@@ -41,14 +38,15 @@ namespace SharpTerminal
         {
             get { return endpoint.ToString(); }
         }
-		
-		public void Read()
-		{
-            while (input.TryDequeue(out var data))
+
+        public byte[] Read()
+        {
+            if (input.TryDequeue(out byte[] data))
             {
                 if (data.Length == 0) Thrower.Throw("Listener EOF");
-                readline.Append(data);
+                return data;
             }
+            return null;
         }
 
         public void Write(byte[] bytes)

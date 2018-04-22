@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.panelLeft = new System.Windows.Forms.Panel();
             this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
@@ -109,6 +110,7 @@
             this.buttonSendHex5 = new System.Windows.Forms.Button();
             this.buttonSendHex2 = new System.Windows.Forms.Button();
             this.buttonSendHex = new System.Windows.Forms.Button();
+            this.timer = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
             this.splitContainer.Panel2.SuspendLayout();
@@ -158,6 +160,7 @@
             // 
             this.richTextBoxLog.BackColor = System.Drawing.Color.Black;
             this.richTextBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBoxLog.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBoxLog.ForeColor = System.Drawing.Color.White;
             this.richTextBoxLog.Location = new System.Drawing.Point(0, 91);
             this.richTextBoxLog.Margin = new System.Windows.Forms.Padding(2);
@@ -1144,6 +1147,11 @@
             this.buttonSendHex.UseVisualStyleBackColor = true;
             this.buttonSendHex.Click += new System.EventHandler(this.ButtonSendHex_Click);
             // 
+            // timer
+            // 
+            this.timer.Interval = 50;
+            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            // 
             // TerminalControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1259,5 +1267,6 @@
         private System.Windows.Forms.Button buttonSendHex6;
         private System.Windows.Forms.TextBox textBoxHexInput5;
         private System.Windows.Forms.Button buttonSendHex5;
+        private System.Windows.Forms.Timer timer;
     }
 }

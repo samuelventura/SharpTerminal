@@ -4,9 +4,8 @@ namespace SharpTerminal
 {
 	public interface IoManager: IDisposable
 	{
-		void Read();
+        byte[] Read();
 		void Write(byte[] bytes);
-
         string Name { get; }
 	}
 }

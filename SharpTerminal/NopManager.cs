@@ -17,9 +17,9 @@ namespace SharpTerminal
             get { return string.Empty; }
         }
 
-        public void Read()
+        public byte[] Read()
 		{
-			
+            return null;
 		}
 		
 		public void Write(byte[] bytes)
