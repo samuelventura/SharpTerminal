@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 namespace SharpTerminal
 {
@@ -19,6 +20,7 @@ namespace SharpTerminal
 
         public byte[] Read()
 		{
+            Thread.Sleep(100);
             return null;
 		}
 		

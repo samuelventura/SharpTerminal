@@ -145,6 +145,7 @@ namespace SharpTerminal
 
         private void EnableControls(bool closed)
         {
+            timer.Interval = closed ? 500 : 200;
             linkLabelSerial.Enabled = closed;
             comboBoxSerial.Enabled = closed;
             buttonOpenSerial.Enabled = closed;
@@ -222,8 +223,10 @@ namespace SharpTerminal
         {
             Disposer.Dispose(iom);
             iom = new NopManager();
-            uir.Run(() => buffer.Flush());
-            uir.Run(() => EnableControls(true));
+            uir.Run(() => {
+                buffer.Flush();
+                EnableControls(true);
+            });
         }
 
         private void IoException(Exception ex)
@@ -269,7 +272,7 @@ namespace SharpTerminal
         private void TerminalControl_Load(object sender, EventArgs e)
         {
             uir = new ControlRunner(this);
-            ior = new ThreadRunner("IO", IoException, IoIdle, 10);
+            ior = new ThreadRunner("IO", IoException, IoIdle, 50);
             if (comboBoxReadMode.SelectedIndex < 0) comboBoxReadMode.SelectedIndex = 0;
             if (comboBoxSendMode.SelectedIndex < 0) comboBoxSendMode.SelectedIndex = 0;
             if (comboBoxServerIP.SelectedIndex < 0) comboBoxServerIP.SelectedIndex = 0;
