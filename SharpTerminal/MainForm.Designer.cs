@@ -38,11 +38,18 @@ namespace SharpTerminal
             this.cloneToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.renameToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.exportAllToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.exportSelectedToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.importToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.removeToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.statusStrip = new System.Windows.Forms.StatusStrip();
+            this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.terminalControl1 = new SharpTerminal.TerminalControl();
             this.toolStrip.SuspendLayout();
+            this.statusStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -54,6 +61,10 @@ namespace SharpTerminal
             this.cloneToolStripButton,
             this.renameToolStripButton,
             this.toolStripSeparator1,
+            this.exportAllToolStripButton,
+            this.exportSelectedToolStripButton,
+            this.importToolStripButton,
+            this.toolStripSeparator2,
             this.removeToolStripButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
@@ -99,6 +110,44 @@ namespace SharpTerminal
             this.toolStripSeparator1.Name = "toolStripSeparator1";
             this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
+            // exportAllToolStripButton
+            // 
+            this.exportAllToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.exportAllToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("exportAllToolStripButton.Image")));
+            this.exportAllToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.exportAllToolStripButton.Name = "exportAllToolStripButton";
+            this.exportAllToolStripButton.Size = new System.Drawing.Size(61, 22);
+            this.exportAllToolStripButton.Text = "Export All";
+            this.exportAllToolStripButton.ToolTipText = "Export All Sessions to File";
+            this.exportAllToolStripButton.Click += new System.EventHandler(this.ExportAllToolStripButton_Click);
+            // 
+            // exportSelectedToolStripButton
+            // 
+            this.exportSelectedToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.exportSelectedToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("exportSelectedToolStripButton.Image")));
+            this.exportSelectedToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.exportSelectedToolStripButton.Name = "exportSelectedToolStripButton";
+            this.exportSelectedToolStripButton.Size = new System.Drawing.Size(91, 22);
+            this.exportSelectedToolStripButton.Text = "Export Selected";
+            this.exportSelectedToolStripButton.ToolTipText = "Export Selected Session to File";
+            this.exportSelectedToolStripButton.Click += new System.EventHandler(this.ExportSelectedToolStripButton_Click);
+            // 
+            // importToolStripButton
+            // 
+            this.importToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.importToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("importToolStripButton.Image")));
+            this.importToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.importToolStripButton.Name = "importToolStripButton";
+            this.importToolStripButton.Size = new System.Drawing.Size(47, 22);
+            this.importToolStripButton.Text = "Import";
+            this.importToolStripButton.ToolTipText = "Import Session from File";
+            this.importToolStripButton.Click += new System.EventHandler(this.ImportToolStripButton_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
             // removeToolStripButton
             // 
             this.removeToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
@@ -110,6 +159,22 @@ namespace SharpTerminal
             this.removeToolStripButton.ToolTipText = "Remove Selected Session";
             this.removeToolStripButton.Click += new System.EventHandler(this.RemoveToolStripButton_Click);
             // 
+            // statusStrip
+            // 
+            this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel});
+            this.statusStrip.Location = new System.Drawing.Point(0, 537);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.Size = new System.Drawing.Size(757, 22);
+            this.statusStrip.TabIndex = 4;
+            this.statusStrip.Text = "statusTrip1";
+            // 
+            // toolStripStatusLabel
+            // 
+            this.toolStripStatusLabel.Name = "toolStripStatusLabel";
+            this.toolStripStatusLabel.Size = new System.Drawing.Size(168, 17);
+            this.toolStripStatusLabel.Text = "/home/user/db.SharpTerminal";
+            // 
             // tabControl
             // 
             this.tabControl.Controls.Add(this.tabPage1);
@@ -117,8 +182,8 @@ namespace SharpTerminal
             this.tabControl.Location = new System.Drawing.Point(0, 25);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(757, 534);
-            this.tabControl.TabIndex = 2;
+            this.tabControl.Size = new System.Drawing.Size(757, 512);
+            this.tabControl.TabIndex = 5;
             // 
             // tabPage1
             // 
@@ -126,7 +191,7 @@ namespace SharpTerminal
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(749, 508);
+            this.tabPage1.Size = new System.Drawing.Size(749, 486);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Session 1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -137,7 +202,7 @@ namespace SharpTerminal
             this.terminalControl1.Location = new System.Drawing.Point(3, 3);
             this.terminalControl1.MinimumSize = new System.Drawing.Size(620, 500);
             this.terminalControl1.Name = "terminalControl1";
-            this.terminalControl1.Size = new System.Drawing.Size(743, 502);
+            this.terminalControl1.Size = new System.Drawing.Size(743, 500);
             this.terminalControl1.TabIndex = 0;
             // 
             // MainForm
@@ -146,6 +211,7 @@ namespace SharpTerminal
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(757, 559);
             this.Controls.Add(this.tabControl);
+            this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
@@ -156,6 +222,8 @@ namespace SharpTerminal
             this.Load += new System.EventHandler(this.MainFormLoad);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.statusStrip.ResumeLayout(false);
+            this.statusStrip.PerformLayout();
             this.tabControl.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -163,13 +231,19 @@ namespace SharpTerminal
 
 		}
         private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.TabControl tabControl;
-        private System.Windows.Forms.TabPage tabPage1;
-        private TerminalControl terminalControl1;
         private System.Windows.Forms.ToolStripButton newToolStripButton;
         private System.Windows.Forms.ToolStripButton cloneToolStripButton;
         private System.Windows.Forms.ToolStripButton renameToolStripButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton removeToolStripButton;
+        private System.Windows.Forms.ToolStripButton exportAllToolStripButton;
+        private System.Windows.Forms.ToolStripButton exportSelectedToolStripButton;
+        private System.Windows.Forms.ToolStripButton importToolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.StatusStrip statusStrip;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage tabPage1;
+        private TerminalControl terminalControl1;
     }
 }
