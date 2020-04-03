@@ -40,12 +40,11 @@ namespace SharpTerminal
             return (TerminalControl)tabPage.Controls[0];
         }
 
-        private TerminalControl GetSettings(TabPage tabPage, SessionSettings session)
+        private void GetSettings(TabPage tabPage, SessionSettings session)
         {
             var terminalControl = GetTerminal(tabPage);
             terminalControl.FromUI(session);
             session.Name = tabPage.Text;
-            return terminalControl;
         }
 
         private List<SessionSettings> GetSessionList()
@@ -54,8 +53,7 @@ namespace SharpTerminal
             foreach (TabPage tabPage in tabControl.TabPages)
             {
                 var session = new SessionSettings();
-                var modbusControl = GetSettings(tabPage, session);
-                modbusControl.Unload();
+                GetSettings(tabPage, session);
                 sessions.Add(session);
             }
             return sessions;
@@ -63,6 +61,8 @@ namespace SharpTerminal
 
         void MainFormFormClosed(object sender, FormClosedEventArgs e)
 		{
+            foreach (TabPage tabPage in tabControl.TabPages) GetTerminal(tabPage).Unload();
+
             var live = GetSessionList();
             var stored = sessionDao.Load();
 
@@ -87,7 +87,7 @@ namespace SharpTerminal
 	
 		void MainFormLoad(object sender, EventArgs e)
 		{
-			Text = string.Format("SharpTerminal - 1.0.5 https://github.com/samuelventura/SharpTerminal");
+			Text = string.Format("SharpTerminal - 1.0.6 https://github.com/samuelventura/SharpTerminal");
 
             var sessions = sessionDao.Load();
 
@@ -107,6 +107,11 @@ namespace SharpTerminal
             tabControl.SelectedIndex = 0;
         }
 
+        private void SaveToolStripButton_Click(object sender, EventArgs e)
+        {
+            sessionDao.Save(GetSessionList());
+        }
+
         private void NewToolStripButton_Click(object sender, EventArgs e)
         {
             AddSession(new SessionSettings());
@@ -118,7 +123,7 @@ namespace SharpTerminal
             if (selectedPage != null)
             {
                 var session = new SessionSettings();
-                var terminalControl = GetSettings(selectedPage, session);
+                GetSettings(selectedPage, session);
                 AddSession(session);
             }
         }

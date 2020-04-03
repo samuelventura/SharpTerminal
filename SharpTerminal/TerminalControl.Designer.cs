@@ -52,8 +52,10 @@
             this.panelRight = new System.Windows.Forms.Panel();
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPageText = new System.Windows.Forms.TabPage();
-            this.textBoxTextInput = new System.Windows.Forms.TextBox();
             this.tableLayoutPanelTextTop = new System.Windows.Forms.TableLayoutPanel();
+            this.textBoxTextInput = new System.Windows.Forms.TextBox();
+            this.buttonSendText = new System.Windows.Forms.Button();
+            this.checkBoxStandard = new System.Windows.Forms.CheckBox();
             this.textBoxTextInput5 = new System.Windows.Forms.TextBox();
             this.textBoxTextInput6 = new System.Windows.Forms.TextBox();
             this.textBoxTextInput7 = new System.Windows.Forms.TextBox();
@@ -71,7 +73,6 @@
             this.buttonSendText8 = new System.Windows.Forms.Button();
             this.buttonSendText4 = new System.Windows.Forms.Button();
             this.buttonSendText7 = new System.Windows.Forms.Button();
-            this.buttonSendText = new System.Windows.Forms.Button();
             this.buttonSendText6 = new System.Windows.Forms.Button();
             this.textBoxTextInput1 = new System.Windows.Forms.TextBox();
             this.comboBoxSendMode = new System.Windows.Forms.ComboBox();
@@ -83,8 +84,8 @@
             this.checkBoxReadline = new System.Windows.Forms.CheckBox();
             this.comboBoxReadMode = new System.Windows.Forms.ComboBox();
             this.tabPageHex = new System.Windows.Forms.TabPage();
-            this.textBoxHexInput = new System.Windows.Forms.TextBox();
             this.tableLayoutPanelHexTop = new System.Windows.Forms.TableLayoutPanel();
+            this.textBoxHexInput = new System.Windows.Forms.TextBox();
             this.textBoxHexInput12 = new System.Windows.Forms.TextBox();
             this.textBoxHexInput11 = new System.Windows.Forms.TextBox();
             this.textBoxHexInput10 = new System.Windows.Forms.TextBox();
@@ -141,8 +142,8 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.panelRight);
-            this.splitContainer.Size = new System.Drawing.Size(620, 400);
-            this.splitContainer.SplitterDistance = 390;
+            this.splitContainer.Size = new System.Drawing.Size(1242, 748);
+            this.splitContainer.SplitterDistance = 504;
             this.splitContainer.TabIndex = 8;
             // 
             // panelLeft
@@ -153,7 +154,7 @@
             this.panelLeft.Location = new System.Drawing.Point(0, 0);
             this.panelLeft.Margin = new System.Windows.Forms.Padding(2);
             this.panelLeft.Name = "panelLeft";
-            this.panelLeft.Size = new System.Drawing.Size(390, 400);
+            this.panelLeft.Size = new System.Drawing.Size(504, 748);
             this.panelLeft.TabIndex = 6;
             // 
             // richTextBoxLog
@@ -166,7 +167,7 @@
             this.richTextBoxLog.Margin = new System.Windows.Forms.Padding(2);
             this.richTextBoxLog.Name = "richTextBoxLog";
             this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(390, 309);
+            this.richTextBoxLog.Size = new System.Drawing.Size(504, 657);
             this.richTextBoxLog.TabIndex = 16;
             this.richTextBoxLog.Text = "";
             // 
@@ -205,7 +206,7 @@
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(390, 91);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(504, 91);
             this.tableLayoutPanelMain.TabIndex = 8;
             // 
             // comboBoxServerIP
@@ -404,7 +405,7 @@
             this.panelRight.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelRight.Location = new System.Drawing.Point(0, 0);
             this.panelRight.Name = "panelRight";
-            this.panelRight.Size = new System.Drawing.Size(226, 400);
+            this.panelRight.Size = new System.Drawing.Size(734, 748);
             this.panelRight.TabIndex = 8;
             // 
             // tabControl
@@ -415,32 +416,20 @@
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(226, 400);
+            this.tabControl.Size = new System.Drawing.Size(734, 748);
             this.tabControl.TabIndex = 0;
             this.tabControl.Selected += new System.Windows.Forms.TabControlEventHandler(this.TabControl_Selected);
             // 
             // tabPageText
             // 
-            this.tabPageText.Controls.Add(this.textBoxTextInput);
             this.tabPageText.Controls.Add(this.tableLayoutPanelTextTop);
             this.tabPageText.Location = new System.Drawing.Point(4, 22);
             this.tabPageText.Name = "tabPageText";
             this.tabPageText.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageText.Size = new System.Drawing.Size(218, 374);
+            this.tabPageText.Size = new System.Drawing.Size(726, 722);
             this.tabPageText.TabIndex = 0;
             this.tabPageText.Text = "Text";
             this.tabPageText.UseVisualStyleBackColor = true;
-            // 
-            // textBoxTextInput
-            // 
-            this.textBoxTextInput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput.Location = new System.Drawing.Point(3, 341);
-            this.textBoxTextInput.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxTextInput.Multiline = true;
-            this.textBoxTextInput.Name = "textBoxTextInput";
-            this.textBoxTextInput.Size = new System.Drawing.Size(212, 30);
-            this.textBoxTextInput.TabIndex = 28;
-            this.textBoxTextInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxInput_KeyDown);
             // 
             // tableLayoutPanelTextTop
             // 
@@ -449,38 +438,40 @@
             this.tableLayoutPanelTextTop.ColumnCount = 2;
             this.tableLayoutPanelTextTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelTextTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput5, 0, 5);
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput6, 0, 6);
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput7, 0, 7);
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput8, 0, 8);
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput9, 0, 9);
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput10, 0, 10);
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput11, 0, 11);
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput12, 0, 12);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText12, 1, 12);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText11, 1, 11);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText10, 1, 10);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText3, 1, 3);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText9, 1, 9);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText5, 1, 5);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText8, 1, 8);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText4, 1, 4);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText7, 1, 7);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText, 1, 13);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText6, 1, 6);
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput1, 0, 1);
-            this.tableLayoutPanelTextTop.Controls.Add(this.comboBoxSendMode, 0, 13);
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput4, 0, 4);
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput2, 0, 2);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText1, 1, 1);
-            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput3, 0, 3);
-            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText2, 1, 2);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput, 0, 15);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText, 1, 15);
+            this.tableLayoutPanelTextTop.Controls.Add(this.checkBoxStandard, 1, 1);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput5, 0, 6);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput6, 0, 7);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput7, 0, 8);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput8, 0, 9);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput9, 0, 10);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput10, 0, 11);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput11, 0, 12);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput12, 0, 13);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText12, 1, 13);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText11, 1, 12);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText10, 1, 11);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText3, 1, 4);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText9, 1, 10);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText5, 1, 6);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText8, 1, 9);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText4, 1, 5);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText7, 1, 8);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText6, 1, 7);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput1, 0, 2);
+            this.tableLayoutPanelTextTop.Controls.Add(this.comboBoxSendMode, 0, 1);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput4, 0, 5);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput2, 0, 3);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText1, 1, 2);
+            this.tableLayoutPanelTextTop.Controls.Add(this.textBoxTextInput3, 0, 4);
+            this.tableLayoutPanelTextTop.Controls.Add(this.buttonSendText2, 1, 3);
             this.tableLayoutPanelTextTop.Controls.Add(this.checkBoxReadline, 1, 0);
             this.tableLayoutPanelTextTop.Controls.Add(this.comboBoxReadMode, 0, 0);
-            this.tableLayoutPanelTextTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanelTextTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelTextTop.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanelTextTop.Name = "tableLayoutPanelTextTop";
-            this.tableLayoutPanelTextTop.RowCount = 14;
+            this.tableLayoutPanelTextTop.RowCount = 16;
             this.tableLayoutPanelTextTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTextTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTextTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -495,206 +486,234 @@
             this.tableLayoutPanelTextTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTextTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelTextTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelTextTop.Size = new System.Drawing.Size(212, 338);
+            this.tableLayoutPanelTextTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelTextTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelTextTop.Size = new System.Drawing.Size(720, 716);
             this.tableLayoutPanelTextTop.TabIndex = 0;
+            // 
+            // textBoxTextInput
+            // 
+            this.textBoxTextInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxTextInput.Location = new System.Drawing.Point(2, 340);
+            this.textBoxTextInput.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxTextInput.Multiline = true;
+            this.textBoxTextInput.Name = "textBoxTextInput";
+            this.textBoxTextInput.Size = new System.Drawing.Size(642, 374);
+            this.textBoxTextInput.TabIndex = 28;
+            // 
+            // buttonSendText
+            // 
+            this.buttonSendText.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.buttonSendText.Location = new System.Drawing.Point(648, 340);
+            this.buttonSendText.Margin = new System.Windows.Forms.Padding(2);
+            this.buttonSendText.Name = "buttonSendText";
+            this.buttonSendText.Size = new System.Drawing.Size(70, 374);
+            this.buttonSendText.TabIndex = 29;
+            this.buttonSendText.Text = "Send";
+            this.buttonSendText.UseVisualStyleBackColor = true;
+            this.buttonSendText.Click += new System.EventHandler(this.ButtonSendLines_Click);
+            // 
+            // checkBoxStandard
+            // 
+            this.checkBoxStandard.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.checkBoxStandard.AutoSize = true;
+            this.checkBoxStandard.Checked = true;
+            this.checkBoxStandard.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBoxStandard.Location = new System.Drawing.Point(648, 29);
+            this.checkBoxStandard.Margin = new System.Windows.Forms.Padding(2);
+            this.checkBoxStandard.Name = "checkBoxStandard";
+            this.checkBoxStandard.Size = new System.Drawing.Size(69, 17);
+            this.checkBoxStandard.TabIndex = 3;
+            this.checkBoxStandard.Text = "Standard";
+            this.checkBoxStandard.UseVisualStyleBackColor = true;
+            this.checkBoxStandard.CheckedChanged += new System.EventHandler(this.CheckBoxStandard_CheckedChanged);
             // 
             // textBoxTextInput5
             // 
             this.textBoxTextInput5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput5.Location = new System.Drawing.Point(2, 123);
+            this.textBoxTextInput5.Location = new System.Drawing.Point(2, 148);
             this.textBoxTextInput5.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput5.Name = "textBoxTextInput5";
-            this.textBoxTextInput5.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput5.TabIndex = 10;
+            this.textBoxTextInput5.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput5.TabIndex = 12;
             this.textBoxTextInput5.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // textBoxTextInput6
             // 
             this.textBoxTextInput6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput6.Location = new System.Drawing.Point(2, 147);
+            this.textBoxTextInput6.Location = new System.Drawing.Point(2, 172);
             this.textBoxTextInput6.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput6.Name = "textBoxTextInput6";
-            this.textBoxTextInput6.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput6.TabIndex = 12;
+            this.textBoxTextInput6.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput6.TabIndex = 14;
             this.textBoxTextInput6.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // textBoxTextInput7
             // 
             this.textBoxTextInput7.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput7.Location = new System.Drawing.Point(2, 171);
+            this.textBoxTextInput7.Location = new System.Drawing.Point(2, 196);
             this.textBoxTextInput7.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput7.Name = "textBoxTextInput7";
-            this.textBoxTextInput7.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput7.TabIndex = 14;
+            this.textBoxTextInput7.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput7.TabIndex = 16;
             this.textBoxTextInput7.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // textBoxTextInput8
             // 
             this.textBoxTextInput8.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput8.Location = new System.Drawing.Point(2, 195);
+            this.textBoxTextInput8.Location = new System.Drawing.Point(2, 220);
             this.textBoxTextInput8.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput8.Name = "textBoxTextInput8";
-            this.textBoxTextInput8.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput8.TabIndex = 16;
+            this.textBoxTextInput8.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput8.TabIndex = 18;
             this.textBoxTextInput8.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // textBoxTextInput9
             // 
             this.textBoxTextInput9.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput9.Location = new System.Drawing.Point(2, 219);
+            this.textBoxTextInput9.Location = new System.Drawing.Point(2, 244);
             this.textBoxTextInput9.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput9.Name = "textBoxTextInput9";
-            this.textBoxTextInput9.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput9.TabIndex = 18;
+            this.textBoxTextInput9.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput9.TabIndex = 20;
             this.textBoxTextInput9.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // textBoxTextInput10
             // 
             this.textBoxTextInput10.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput10.Location = new System.Drawing.Point(2, 243);
+            this.textBoxTextInput10.Location = new System.Drawing.Point(2, 268);
             this.textBoxTextInput10.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput10.Name = "textBoxTextInput10";
-            this.textBoxTextInput10.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput10.TabIndex = 20;
+            this.textBoxTextInput10.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput10.TabIndex = 22;
             this.textBoxTextInput10.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // textBoxTextInput11
             // 
             this.textBoxTextInput11.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput11.Location = new System.Drawing.Point(2, 267);
+            this.textBoxTextInput11.Location = new System.Drawing.Point(2, 292);
             this.textBoxTextInput11.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput11.Name = "textBoxTextInput11";
-            this.textBoxTextInput11.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput11.TabIndex = 22;
+            this.textBoxTextInput11.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput11.TabIndex = 24;
             this.textBoxTextInput11.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // textBoxTextInput12
             // 
             this.textBoxTextInput12.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput12.Location = new System.Drawing.Point(2, 291);
+            this.textBoxTextInput12.Location = new System.Drawing.Point(2, 316);
             this.textBoxTextInput12.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput12.Name = "textBoxTextInput12";
-            this.textBoxTextInput12.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput12.TabIndex = 24;
+            this.textBoxTextInput12.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput12.TabIndex = 26;
             this.textBoxTextInput12.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // buttonSendText12
             // 
-            this.buttonSendText12.Location = new System.Drawing.Point(140, 291);
+            this.buttonSendText12.Location = new System.Drawing.Point(648, 316);
             this.buttonSendText12.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText12.Name = "buttonSendText12";
             this.buttonSendText12.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText12.TabIndex = 25;
+            this.buttonSendText12.TabIndex = 27;
             this.buttonSendText12.Text = "Send";
             this.buttonSendText12.UseVisualStyleBackColor = true;
             this.buttonSendText12.Click += new System.EventHandler(this.ButtonSendText_Click);
             // 
             // buttonSendText11
             // 
-            this.buttonSendText11.Location = new System.Drawing.Point(140, 267);
+            this.buttonSendText11.Location = new System.Drawing.Point(648, 292);
             this.buttonSendText11.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText11.Name = "buttonSendText11";
             this.buttonSendText11.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText11.TabIndex = 23;
+            this.buttonSendText11.TabIndex = 25;
             this.buttonSendText11.Text = "Send";
             this.buttonSendText11.UseVisualStyleBackColor = true;
             this.buttonSendText11.Click += new System.EventHandler(this.ButtonSendText_Click);
             // 
             // buttonSendText10
             // 
-            this.buttonSendText10.Location = new System.Drawing.Point(140, 243);
+            this.buttonSendText10.Location = new System.Drawing.Point(648, 268);
             this.buttonSendText10.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText10.Name = "buttonSendText10";
             this.buttonSendText10.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText10.TabIndex = 21;
+            this.buttonSendText10.TabIndex = 23;
             this.buttonSendText10.Text = "Send";
             this.buttonSendText10.UseVisualStyleBackColor = true;
             this.buttonSendText10.Click += new System.EventHandler(this.ButtonSendText_Click);
             // 
             // buttonSendText3
             // 
-            this.buttonSendText3.Location = new System.Drawing.Point(140, 75);
+            this.buttonSendText3.Location = new System.Drawing.Point(648, 100);
             this.buttonSendText3.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText3.Name = "buttonSendText3";
             this.buttonSendText3.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText3.TabIndex = 7;
+            this.buttonSendText3.TabIndex = 9;
             this.buttonSendText3.Text = "Send";
             this.buttonSendText3.UseVisualStyleBackColor = true;
             this.buttonSendText3.Click += new System.EventHandler(this.ButtonSendText_Click);
             // 
             // buttonSendText9
             // 
-            this.buttonSendText9.Location = new System.Drawing.Point(140, 219);
+            this.buttonSendText9.Location = new System.Drawing.Point(648, 244);
             this.buttonSendText9.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText9.Name = "buttonSendText9";
             this.buttonSendText9.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText9.TabIndex = 19;
+            this.buttonSendText9.TabIndex = 21;
             this.buttonSendText9.Text = "Send";
             this.buttonSendText9.UseVisualStyleBackColor = true;
             this.buttonSendText9.Click += new System.EventHandler(this.ButtonSendText_Click);
             // 
             // buttonSendText5
             // 
-            this.buttonSendText5.Location = new System.Drawing.Point(140, 123);
+            this.buttonSendText5.Location = new System.Drawing.Point(648, 148);
             this.buttonSendText5.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText5.Name = "buttonSendText5";
             this.buttonSendText5.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText5.TabIndex = 11;
+            this.buttonSendText5.TabIndex = 13;
             this.buttonSendText5.Text = "Send";
             this.buttonSendText5.UseVisualStyleBackColor = true;
             this.buttonSendText5.Click += new System.EventHandler(this.ButtonSendText_Click);
             // 
             // buttonSendText8
             // 
-            this.buttonSendText8.Location = new System.Drawing.Point(140, 195);
+            this.buttonSendText8.Location = new System.Drawing.Point(648, 220);
             this.buttonSendText8.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText8.Name = "buttonSendText8";
             this.buttonSendText8.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText8.TabIndex = 17;
+            this.buttonSendText8.TabIndex = 19;
             this.buttonSendText8.Text = "Send";
             this.buttonSendText8.UseVisualStyleBackColor = true;
             this.buttonSendText8.Click += new System.EventHandler(this.ButtonSendText_Click);
             // 
             // buttonSendText4
             // 
-            this.buttonSendText4.Location = new System.Drawing.Point(140, 99);
+            this.buttonSendText4.Location = new System.Drawing.Point(648, 124);
             this.buttonSendText4.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText4.Name = "buttonSendText4";
             this.buttonSendText4.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText4.TabIndex = 9;
+            this.buttonSendText4.TabIndex = 11;
             this.buttonSendText4.Text = "Send";
             this.buttonSendText4.UseVisualStyleBackColor = true;
             this.buttonSendText4.Click += new System.EventHandler(this.ButtonSendText_Click);
             // 
             // buttonSendText7
             // 
-            this.buttonSendText7.Location = new System.Drawing.Point(140, 171);
+            this.buttonSendText7.Location = new System.Drawing.Point(648, 196);
             this.buttonSendText7.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText7.Name = "buttonSendText7";
             this.buttonSendText7.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText7.TabIndex = 15;
+            this.buttonSendText7.TabIndex = 17;
             this.buttonSendText7.Text = "Send";
             this.buttonSendText7.UseVisualStyleBackColor = true;
             this.buttonSendText7.Click += new System.EventHandler(this.ButtonSendText_Click);
             // 
-            // buttonSendText
-            // 
-            this.buttonSendText.Location = new System.Drawing.Point(140, 315);
-            this.buttonSendText.Margin = new System.Windows.Forms.Padding(2);
-            this.buttonSendText.Name = "buttonSendText";
-            this.buttonSendText.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText.TabIndex = 27;
-            this.buttonSendText.Text = "Send";
-            this.buttonSendText.UseVisualStyleBackColor = true;
-            this.buttonSendText.Click += new System.EventHandler(this.ButtonSendLines_Click);
-            // 
             // buttonSendText6
             // 
-            this.buttonSendText6.Location = new System.Drawing.Point(140, 147);
+            this.buttonSendText6.Location = new System.Drawing.Point(648, 172);
             this.buttonSendText6.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText6.Name = "buttonSendText6";
             this.buttonSendText6.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText6.TabIndex = 13;
+            this.buttonSendText6.TabIndex = 15;
             this.buttonSendText6.Text = "Send";
             this.buttonSendText6.UseVisualStyleBackColor = true;
             this.buttonSendText6.Click += new System.EventHandler(this.ButtonSendText_Click);
@@ -702,11 +721,11 @@
             // textBoxTextInput1
             // 
             this.textBoxTextInput1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput1.Location = new System.Drawing.Point(2, 27);
+            this.textBoxTextInput1.Location = new System.Drawing.Point(2, 52);
             this.textBoxTextInput1.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput1.Name = "textBoxTextInput1";
-            this.textBoxTextInput1.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput1.TabIndex = 2;
+            this.textBoxTextInput1.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput1.TabIndex = 4;
             this.textBoxTextInput1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // comboBoxSendMode
@@ -719,39 +738,39 @@
             "Append CR",
             "Append NL",
             "Append Nothing"});
-            this.comboBoxSendMode.Location = new System.Drawing.Point(2, 315);
+            this.comboBoxSendMode.Location = new System.Drawing.Point(2, 27);
             this.comboBoxSendMode.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxSendMode.Name = "comboBoxSendMode";
-            this.comboBoxSendMode.Size = new System.Drawing.Size(134, 21);
-            this.comboBoxSendMode.TabIndex = 26;
+            this.comboBoxSendMode.Size = new System.Drawing.Size(642, 21);
+            this.comboBoxSendMode.TabIndex = 2;
             // 
             // textBoxTextInput4
             // 
             this.textBoxTextInput4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput4.Location = new System.Drawing.Point(2, 99);
+            this.textBoxTextInput4.Location = new System.Drawing.Point(2, 124);
             this.textBoxTextInput4.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput4.Name = "textBoxTextInput4";
-            this.textBoxTextInput4.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput4.TabIndex = 8;
+            this.textBoxTextInput4.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput4.TabIndex = 10;
             this.textBoxTextInput4.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // textBoxTextInput2
             // 
             this.textBoxTextInput2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput2.Location = new System.Drawing.Point(2, 51);
+            this.textBoxTextInput2.Location = new System.Drawing.Point(2, 76);
             this.textBoxTextInput2.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput2.Name = "textBoxTextInput2";
-            this.textBoxTextInput2.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput2.TabIndex = 4;
+            this.textBoxTextInput2.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput2.TabIndex = 6;
             this.textBoxTextInput2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // buttonSendText1
             // 
-            this.buttonSendText1.Location = new System.Drawing.Point(140, 27);
+            this.buttonSendText1.Location = new System.Drawing.Point(648, 52);
             this.buttonSendText1.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText1.Name = "buttonSendText1";
             this.buttonSendText1.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText1.TabIndex = 3;
+            this.buttonSendText1.TabIndex = 5;
             this.buttonSendText1.Text = "Send";
             this.buttonSendText1.UseVisualStyleBackColor = true;
             this.buttonSendText1.Click += new System.EventHandler(this.ButtonSendText_Click);
@@ -759,20 +778,20 @@
             // textBoxTextInput3
             // 
             this.textBoxTextInput3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxTextInput3.Location = new System.Drawing.Point(2, 75);
+            this.textBoxTextInput3.Location = new System.Drawing.Point(2, 100);
             this.textBoxTextInput3.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxTextInput3.Name = "textBoxTextInput3";
-            this.textBoxTextInput3.Size = new System.Drawing.Size(134, 20);
-            this.textBoxTextInput3.TabIndex = 6;
+            this.textBoxTextInput3.Size = new System.Drawing.Size(642, 20);
+            this.textBoxTextInput3.TabIndex = 8;
             this.textBoxTextInput3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // buttonSendText2
             // 
-            this.buttonSendText2.Location = new System.Drawing.Point(140, 51);
+            this.buttonSendText2.Location = new System.Drawing.Point(648, 76);
             this.buttonSendText2.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendText2.Name = "buttonSendText2";
             this.buttonSendText2.Size = new System.Drawing.Size(70, 20);
-            this.buttonSendText2.TabIndex = 5;
+            this.buttonSendText2.TabIndex = 7;
             this.buttonSendText2.Text = "Send";
             this.buttonSendText2.UseVisualStyleBackColor = true;
             this.buttonSendText2.Click += new System.EventHandler(this.ButtonSendText_Click);
@@ -783,7 +802,7 @@
             this.checkBoxReadline.AutoSize = true;
             this.checkBoxReadline.Checked = true;
             this.checkBoxReadline.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxReadline.Location = new System.Drawing.Point(140, 4);
+            this.checkBoxReadline.Location = new System.Drawing.Point(648, 4);
             this.checkBoxReadline.Margin = new System.Windows.Forms.Padding(2);
             this.checkBoxReadline.Name = "checkBoxReadline";
             this.checkBoxReadline.Size = new System.Drawing.Size(68, 17);
@@ -803,32 +822,20 @@
             this.comboBoxReadMode.Location = new System.Drawing.Point(2, 2);
             this.comboBoxReadMode.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxReadMode.Name = "comboBoxReadMode";
-            this.comboBoxReadMode.Size = new System.Drawing.Size(134, 21);
+            this.comboBoxReadMode.Size = new System.Drawing.Size(642, 21);
             this.comboBoxReadMode.TabIndex = 0;
             this.comboBoxReadMode.SelectedIndexChanged += new System.EventHandler(this.ComboBoxReadMode_SelectedIndexChanged);
             // 
             // tabPageHex
             // 
-            this.tabPageHex.Controls.Add(this.textBoxHexInput);
             this.tabPageHex.Controls.Add(this.tableLayoutPanelHexTop);
             this.tabPageHex.Location = new System.Drawing.Point(4, 22);
             this.tabPageHex.Name = "tabPageHex";
             this.tabPageHex.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageHex.Size = new System.Drawing.Size(218, 374);
+            this.tabPageHex.Size = new System.Drawing.Size(726, 722);
             this.tabPageHex.TabIndex = 1;
-            this.tabPageHex.Text = "HEX";
+            this.tabPageHex.Text = "Hexadecimal";
             this.tabPageHex.UseVisualStyleBackColor = true;
-            // 
-            // textBoxHexInput
-            // 
-            this.textBoxHexInput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBoxHexInput.Location = new System.Drawing.Point(3, 315);
-            this.textBoxHexInput.Margin = new System.Windows.Forms.Padding(2);
-            this.textBoxHexInput.Multiline = true;
-            this.textBoxHexInput.Name = "textBoxHexInput";
-            this.textBoxHexInput.Size = new System.Drawing.Size(212, 56);
-            this.textBoxHexInput.TabIndex = 25;
-            this.textBoxHexInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxInput_KeyDown);
             // 
             // tableLayoutPanelHexTop
             // 
@@ -837,6 +844,7 @@
             this.tableLayoutPanelHexTop.ColumnCount = 2;
             this.tableLayoutPanelHexTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelHexTop.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanelHexTop.Controls.Add(this.textBoxHexInput, 0, 12);
             this.tableLayoutPanelHexTop.Controls.Add(this.textBoxHexInput12, 0, 11);
             this.tableLayoutPanelHexTop.Controls.Add(this.textBoxHexInput11, 0, 10);
             this.tableLayoutPanelHexTop.Controls.Add(this.textBoxHexInput10, 0, 9);
@@ -861,8 +869,8 @@
             this.tableLayoutPanelHexTop.Controls.Add(this.textBoxHexInput3, 0, 2);
             this.tableLayoutPanelHexTop.Controls.Add(this.buttonSendHex5, 1, 4);
             this.tableLayoutPanelHexTop.Controls.Add(this.buttonSendHex2, 1, 1);
-            this.tableLayoutPanelHexTop.Controls.Add(this.buttonSendHex, 0, 12);
-            this.tableLayoutPanelHexTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.tableLayoutPanelHexTop.Controls.Add(this.buttonSendHex, 1, 12);
+            this.tableLayoutPanelHexTop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelHexTop.Location = new System.Drawing.Point(3, 3);
             this.tableLayoutPanelHexTop.Name = "tableLayoutPanelHexTop";
             this.tableLayoutPanelHexTop.RowCount = 13;
@@ -878,9 +886,20 @@
             this.tableLayoutPanelHexTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelHexTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelHexTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelHexTop.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanelHexTop.Size = new System.Drawing.Size(212, 312);
+            this.tableLayoutPanelHexTop.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelHexTop.Size = new System.Drawing.Size(720, 716);
             this.tableLayoutPanelHexTop.TabIndex = 0;
+            // 
+            // textBoxHexInput
+            // 
+            this.textBoxHexInput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBoxHexInput.Location = new System.Drawing.Point(2, 290);
+            this.textBoxHexInput.Margin = new System.Windows.Forms.Padding(2);
+            this.textBoxHexInput.Multiline = true;
+            this.textBoxHexInput.Name = "textBoxHexInput";
+            this.textBoxHexInput.Size = new System.Drawing.Size(642, 424);
+            this.textBoxHexInput.TabIndex = 24;
+            this.textBoxHexInput.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxInput_KeyDown);
             // 
             // textBoxHexInput12
             // 
@@ -888,7 +907,7 @@
             this.textBoxHexInput12.Location = new System.Drawing.Point(2, 266);
             this.textBoxHexInput12.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput12.Name = "textBoxHexInput12";
-            this.textBoxHexInput12.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput12.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput12.TabIndex = 22;
             this.textBoxHexInput12.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
@@ -898,7 +917,7 @@
             this.textBoxHexInput11.Location = new System.Drawing.Point(2, 242);
             this.textBoxHexInput11.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput11.Name = "textBoxHexInput11";
-            this.textBoxHexInput11.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput11.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput11.TabIndex = 20;
             this.textBoxHexInput11.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
@@ -908,7 +927,7 @@
             this.textBoxHexInput10.Location = new System.Drawing.Point(2, 218);
             this.textBoxHexInput10.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput10.Name = "textBoxHexInput10";
-            this.textBoxHexInput10.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput10.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput10.TabIndex = 18;
             this.textBoxHexInput10.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
@@ -918,7 +937,7 @@
             this.textBoxHexInput9.Location = new System.Drawing.Point(2, 194);
             this.textBoxHexInput9.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput9.Name = "textBoxHexInput9";
-            this.textBoxHexInput9.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput9.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput9.TabIndex = 16;
             this.textBoxHexInput9.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
@@ -928,7 +947,7 @@
             this.textBoxHexInput8.Location = new System.Drawing.Point(2, 170);
             this.textBoxHexInput8.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput8.Name = "textBoxHexInput8";
-            this.textBoxHexInput8.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput8.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput8.TabIndex = 14;
             this.textBoxHexInput8.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
@@ -938,7 +957,7 @@
             this.textBoxHexInput7.Location = new System.Drawing.Point(2, 146);
             this.textBoxHexInput7.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput7.Name = "textBoxHexInput7";
-            this.textBoxHexInput7.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput7.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput7.TabIndex = 12;
             this.textBoxHexInput7.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
@@ -948,13 +967,13 @@
             this.textBoxHexInput6.Location = new System.Drawing.Point(2, 122);
             this.textBoxHexInput6.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput6.Name = "textBoxHexInput6";
-            this.textBoxHexInput6.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput6.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput6.TabIndex = 10;
             this.textBoxHexInput6.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // buttonSendHex12
             // 
-            this.buttonSendHex12.Location = new System.Drawing.Point(140, 266);
+            this.buttonSendHex12.Location = new System.Drawing.Point(648, 266);
             this.buttonSendHex12.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex12.Name = "buttonSendHex12";
             this.buttonSendHex12.Size = new System.Drawing.Size(70, 20);
@@ -965,7 +984,7 @@
             // 
             // buttonSendHex11
             // 
-            this.buttonSendHex11.Location = new System.Drawing.Point(140, 242);
+            this.buttonSendHex11.Location = new System.Drawing.Point(648, 242);
             this.buttonSendHex11.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex11.Name = "buttonSendHex11";
             this.buttonSendHex11.Size = new System.Drawing.Size(70, 20);
@@ -976,7 +995,7 @@
             // 
             // buttonSendHex10
             // 
-            this.buttonSendHex10.Location = new System.Drawing.Point(140, 218);
+            this.buttonSendHex10.Location = new System.Drawing.Point(648, 218);
             this.buttonSendHex10.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex10.Name = "buttonSendHex10";
             this.buttonSendHex10.Size = new System.Drawing.Size(70, 20);
@@ -987,7 +1006,7 @@
             // 
             // buttonSendHex9
             // 
-            this.buttonSendHex9.Location = new System.Drawing.Point(140, 194);
+            this.buttonSendHex9.Location = new System.Drawing.Point(648, 194);
             this.buttonSendHex9.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex9.Name = "buttonSendHex9";
             this.buttonSendHex9.Size = new System.Drawing.Size(70, 20);
@@ -998,7 +1017,7 @@
             // 
             // buttonSendHex8
             // 
-            this.buttonSendHex8.Location = new System.Drawing.Point(140, 170);
+            this.buttonSendHex8.Location = new System.Drawing.Point(648, 170);
             this.buttonSendHex8.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex8.Name = "buttonSendHex8";
             this.buttonSendHex8.Size = new System.Drawing.Size(70, 20);
@@ -1009,7 +1028,7 @@
             // 
             // buttonSendHex7
             // 
-            this.buttonSendHex7.Location = new System.Drawing.Point(140, 146);
+            this.buttonSendHex7.Location = new System.Drawing.Point(648, 146);
             this.buttonSendHex7.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex7.Name = "buttonSendHex7";
             this.buttonSendHex7.Size = new System.Drawing.Size(70, 20);
@@ -1020,7 +1039,7 @@
             // 
             // buttonSendHex6
             // 
-            this.buttonSendHex6.Location = new System.Drawing.Point(140, 122);
+            this.buttonSendHex6.Location = new System.Drawing.Point(648, 122);
             this.buttonSendHex6.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex6.Name = "buttonSendHex6";
             this.buttonSendHex6.Size = new System.Drawing.Size(70, 20);
@@ -1035,13 +1054,13 @@
             this.textBoxHexInput5.Location = new System.Drawing.Point(2, 98);
             this.textBoxHexInput5.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput5.Name = "textBoxHexInput5";
-            this.textBoxHexInput5.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput5.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput5.TabIndex = 8;
             this.textBoxHexInput5.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // buttonSendHex3
             // 
-            this.buttonSendHex3.Location = new System.Drawing.Point(140, 50);
+            this.buttonSendHex3.Location = new System.Drawing.Point(648, 50);
             this.buttonSendHex3.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex3.Name = "buttonSendHex3";
             this.buttonSendHex3.Size = new System.Drawing.Size(70, 20);
@@ -1052,7 +1071,7 @@
             // 
             // buttonSendHex4
             // 
-            this.buttonSendHex4.Location = new System.Drawing.Point(140, 74);
+            this.buttonSendHex4.Location = new System.Drawing.Point(648, 74);
             this.buttonSendHex4.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex4.Name = "buttonSendHex4";
             this.buttonSendHex4.Size = new System.Drawing.Size(70, 20);
@@ -1067,7 +1086,7 @@
             this.textBoxHexInput1.Location = new System.Drawing.Point(2, 2);
             this.textBoxHexInput1.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput1.Name = "textBoxHexInput1";
-            this.textBoxHexInput1.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput1.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput1.TabIndex = 0;
             this.textBoxHexInput1.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
@@ -1077,7 +1096,7 @@
             this.textBoxHexInput4.Location = new System.Drawing.Point(2, 74);
             this.textBoxHexInput4.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput4.Name = "textBoxHexInput4";
-            this.textBoxHexInput4.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput4.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput4.TabIndex = 6;
             this.textBoxHexInput4.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
@@ -1087,13 +1106,13 @@
             this.textBoxHexInput2.Location = new System.Drawing.Point(2, 26);
             this.textBoxHexInput2.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput2.Name = "textBoxHexInput2";
-            this.textBoxHexInput2.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput2.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput2.TabIndex = 2;
             this.textBoxHexInput2.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // buttonSendHex1
             // 
-            this.buttonSendHex1.Location = new System.Drawing.Point(140, 2);
+            this.buttonSendHex1.Location = new System.Drawing.Point(648, 2);
             this.buttonSendHex1.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex1.Name = "buttonSendHex1";
             this.buttonSendHex1.Size = new System.Drawing.Size(70, 20);
@@ -1108,13 +1127,13 @@
             this.textBoxHexInput3.Location = new System.Drawing.Point(2, 50);
             this.textBoxHexInput3.Margin = new System.Windows.Forms.Padding(2);
             this.textBoxHexInput3.Name = "textBoxHexInput3";
-            this.textBoxHexInput3.Size = new System.Drawing.Size(134, 20);
+            this.textBoxHexInput3.Size = new System.Drawing.Size(642, 20);
             this.textBoxHexInput3.TabIndex = 4;
             this.textBoxHexInput3.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBoxAllInput_KeyDown);
             // 
             // buttonSendHex5
             // 
-            this.buttonSendHex5.Location = new System.Drawing.Point(140, 98);
+            this.buttonSendHex5.Location = new System.Drawing.Point(648, 98);
             this.buttonSendHex5.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex5.Name = "buttonSendHex5";
             this.buttonSendHex5.Size = new System.Drawing.Size(70, 20);
@@ -1125,7 +1144,7 @@
             // 
             // buttonSendHex2
             // 
-            this.buttonSendHex2.Location = new System.Drawing.Point(140, 26);
+            this.buttonSendHex2.Location = new System.Drawing.Point(648, 26);
             this.buttonSendHex2.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex2.Name = "buttonSendHex2";
             this.buttonSendHex2.Size = new System.Drawing.Size(70, 20);
@@ -1136,13 +1155,12 @@
             // 
             // buttonSendHex
             // 
-            this.tableLayoutPanelHexTop.SetColumnSpan(this.buttonSendHex, 2);
             this.buttonSendHex.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.buttonSendHex.Location = new System.Drawing.Point(2, 290);
+            this.buttonSendHex.Location = new System.Drawing.Point(648, 290);
             this.buttonSendHex.Margin = new System.Windows.Forms.Padding(2);
             this.buttonSendHex.Name = "buttonSendHex";
-            this.buttonSendHex.Size = new System.Drawing.Size(208, 20);
-            this.buttonSendHex.TabIndex = 24;
+            this.buttonSendHex.Size = new System.Drawing.Size(70, 424);
+            this.buttonSendHex.TabIndex = 25;
             this.buttonSendHex.Text = "Send";
             this.buttonSendHex.UseVisualStyleBackColor = true;
             this.buttonSendHex.Click += new System.EventHandler(this.ButtonSendHex_Click);
@@ -1150,7 +1168,7 @@
             // timer
             // 
             this.timer.Interval = 50;
-            this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            this.timer.Tick += new System.EventHandler(this.Timer_Tick);
             // 
             // TerminalControl
             // 
@@ -1158,7 +1176,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer);
             this.Name = "TerminalControl";
-            this.Size = new System.Drawing.Size(620, 400);
+            this.Size = new System.Drawing.Size(1242, 748);
             this.Load += new System.EventHandler(this.TerminalControl_Load);
             this.splitContainer.Panel1.ResumeLayout(false);
             this.splitContainer.Panel2.ResumeLayout(false);
@@ -1209,11 +1227,9 @@
         private System.Windows.Forms.Panel panelRight;
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabPageText;
-        private System.Windows.Forms.TextBox textBoxTextInput;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTextTop;
         private System.Windows.Forms.Button buttonSendText3;
         private System.Windows.Forms.Button buttonSendText4;
-        private System.Windows.Forms.Button buttonSendText;
         private System.Windows.Forms.TextBox textBoxTextInput1;
         private System.Windows.Forms.ComboBox comboBoxSendMode;
         private System.Windows.Forms.TextBox textBoxTextInput4;
@@ -1234,7 +1250,6 @@
         private System.Windows.Forms.Button buttonSendHex1;
         private System.Windows.Forms.TextBox textBoxHexInput3;
         private System.Windows.Forms.Button buttonSendHex2;
-        private System.Windows.Forms.Button buttonSendHex;
         private System.Windows.Forms.TextBox textBoxTextInput5;
         private System.Windows.Forms.TextBox textBoxTextInput6;
         private System.Windows.Forms.TextBox textBoxTextInput7;
@@ -1268,5 +1283,9 @@
         private System.Windows.Forms.TextBox textBoxHexInput5;
         private System.Windows.Forms.Button buttonSendHex5;
         private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.CheckBox checkBoxStandard;
+        private System.Windows.Forms.TextBox textBoxTextInput;
+        private System.Windows.Forms.Button buttonSendText;
+        private System.Windows.Forms.Button buttonSendHex;
     }
 }

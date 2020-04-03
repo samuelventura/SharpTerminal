@@ -20,6 +20,7 @@ namespace SharpTerminal
         public string ServerIP { get; set; }
         public int ServerPort { get; set; }
         public string SendMode { get; set; }
+        public bool Standard { get; set; }
         public bool Readline { get; set; }
         public string ReadMode { get; set; }
         public string Text { get; set; }

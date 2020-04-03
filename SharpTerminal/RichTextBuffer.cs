@@ -20,12 +20,14 @@ namespace SharpTerminal
         private readonly Queue<Line> lines = new Queue<Line>();
         private Line current;
         private bool readline;
+        private bool hexmode;
+        private bool standard;
         private byte separator;
 
-        private string ToText(string prefix, byte[] bytes)
+        private string ToReadable(string prefix, byte[] bytes)
         {
             var sb = new StringBuilder();
-            sb.Append(prefix);
+            //sb.Append(prefix);
             foreach (var b in bytes)
             {
                 var c = (char)b;
@@ -35,10 +37,23 @@ namespace SharpTerminal
             return sb.ToString();
         }
 
-        private string ToHex(string prefix, byte[] bytes)
+        private string ToText(string prefix, byte[] bytes)
         {
             var sb = new StringBuilder();
-            sb.Append(prefix);
+            //sb.Append(prefix);
+            foreach (var b in bytes)
+            {
+                var c = (char)b;
+                if (Char.IsControl(c)) sb.Append(' ');
+                else sb.Append(c);
+            }
+            return sb.ToString();
+        }
+
+        private string ToHexadecimal(string prefix, byte[] bytes)
+        {
+            var sb = new StringBuilder();
+            //sb.Append(prefix);
             foreach (var b in bytes)
             {
                 sb.Append(b.ToString("X2"));
@@ -64,7 +79,8 @@ namespace SharpTerminal
                 var bytes = current.Bytes.ToArray();
                 current.Now = DateTime.Now;
                 current.Text = ToText("< ", bytes);
-                current.Hex = ToHex("< ", bytes);
+                current.Readable = ToReadable("< ", bytes);
+                current.Hexadecimal = ToHexadecimal("< ", bytes);
                 lines.Enqueue(current);
             }
 
@@ -72,13 +88,17 @@ namespace SharpTerminal
             {
                 Type = "input",
                 Readline = readline,
-                Separator = separator
+                Standard = standard,
+                Hexmode = hexmode,
+                Separator = separator,
             };
         }
 
-        public void Setup(bool readline, byte separator)
+        public void Setup(bool readline, bool standard, bool hexmode, byte separator)
         {
             this.readline = readline;
+            this.standard = standard;
+            this.hexmode = hexmode;
             this.separator = separator;
             Flush();
         }
@@ -90,7 +110,7 @@ namespace SharpTerminal
             {
                 Now = DateTime.Now,
                 Type = type,
-                Text = args.Length > 0 ? string.Format(format, args) : format
+                Readable = args.Length > 0 ? string.Format(format, args) : format
             };
             lines.Enqueue(line);
         }
@@ -101,10 +121,13 @@ namespace SharpTerminal
             var line = new Line
             {
                 Readline = text,
+                Standard = standard,
+                Hexmode = hexmode,
                 Now = DateTime.Now,
                 Type = "output",
                 Text = ToText("> ", bytes),
-                Hex = ToHex("> ", bytes)
+                Readable = ToReadable("> ", bytes),
+                Hexadecimal = ToHexadecimal("> ", bytes)
             };
             lines.Enqueue(line);
         }
@@ -128,43 +151,49 @@ namespace SharpTerminal
             while(lines.Count > 0)
             {
                 var line = lines.Dequeue();
+                var text = line.Standard ? line.Text : line.Readable; 
+                var now = line.Standard && !line.Hexmode ? null as DateTime?: line.Now;
+                var showhex = line.Hexmode || !line.Standard;
 
                 var color = Color.White;
                 switch (line.Type)
                 {
                     case "input":
                         color = Color.DodgerBlue;
-                        if (line.Readline) Add(rtb, color, line.Now, line.Text);
-                        Add(rtb, line.Readline ? Color.Gray : color, line.Now, line.Hex);
+                        if (line.Readline) Add(rtb, color, now, text);
+                        if (showhex) Add(rtb, line.Hexmode ? color : Color.Gray, now, line.Hexadecimal);
                         break;
                     case "output":
                         color = Color.Salmon;
-                        if (line.Readline) Add(rtb, color, line.Now, line.Text);
-                        Add(rtb, line.Readline ? Color.Gray : color, line.Now, line.Hex);
+                        if (line.Readline) Add(rtb, color, now, text);
+                        if (showhex) Add(rtb, line.Hexmode ? color : Color.Gray, now, line.Hexadecimal);
                         break;
                     case "success":
                         color = Color.LimeGreen;
-                        Add(rtb, color, line.Now, line.Text);
+                        Add(rtb, color, now, text);
                         break;
                     case "error":
                         color = Color.OrangeRed;
-                        Add(rtb, color, line.Now, line.Text);
+                        Add(rtb, color, now, text);
                         break;
                     case "warn":
                         color = Color.Yellow;
-                        Add(rtb, color, line.Now, line.Text);
+                        Add(rtb, color, now, text);
                         break;
                 }
             }
         }
 
-        public void Add(RichTextBox rtb, Color color, DateTime now, string line)
+        public void Add(RichTextBox rtb, Color color, DateTime? now, string line)
         {
             rtb.SelectionLength = 0; //clear selection
             rtb.SelectionStart = rtb.Text.Length;
-            rtb.SelectionColor = Color.Gray;
-            rtb.AppendText(now.ToString("HH:mm:ss.fff"));
-            rtb.AppendText(" ");
+            if (now.HasValue)
+            {
+                rtb.SelectionColor = Color.Gray;
+                rtb.AppendText(now.Value.ToString("HH:mm:ss.fff"));
+                rtb.AppendText(" ");
+            }
             rtb.SelectionColor = color;
             rtb.AppendText(line);
             rtb.AppendText("\n");
@@ -180,8 +209,11 @@ namespace SharpTerminal
         public DateTime Now;
         public byte Separator;
         public bool Readline;
+        public bool Standard;
+        public bool Hexmode;
         public string Type;
         public string Text;
-        public string Hex;
+        public string Readable;
+        public string Hexadecimal;
     }
 }

@@ -56,6 +56,7 @@ namespace SharpTerminal
             config.ClientPort = (int)numericUpDownClientPort.Value;
             config.ServerIP = comboBoxServerIP.Text;
             config.ServerPort = (int)numericUpDownServerPort.Value;
+            config.Standard = checkBoxStandard.Checked;
             config.Readline = checkBoxReadline.Checked;
             config.ReadMode = comboBoxReadMode.Text;
             config.SendMode = comboBoxSendMode.Text;
@@ -98,6 +99,7 @@ namespace SharpTerminal
             if (config.SendMode != null) comboBoxSendMode.Text = config.SendMode;
             if (config.ReadMode != null) comboBoxReadMode.Text = config.ReadMode;
             checkBoxReadline.Checked = config.Readline;
+            checkBoxStandard.Checked = config.Standard;
             textBoxTextInput.Text = config.Text;
             textBoxTextInput1.Text = config.Text1;
             textBoxTextInput2.Text = config.Text2;
@@ -205,7 +207,9 @@ namespace SharpTerminal
 
         private void UpdateReadline()
         {
-            var readline = checkBoxReadline.Checked && comboBoxReadMode.SelectedIndex >= 0 && tabControl.SelectedTab != tabPageHex;
+            var standard = checkBoxStandard.Checked;
+            var hexmode = tabControl.SelectedTab == tabPageHex;
+            var readline = checkBoxReadline.Checked && comboBoxReadMode.SelectedIndex >= 0 && !hexmode;
             var separator = (byte)0x00;
             switch (comboBoxReadMode.Text)
             {
@@ -216,7 +220,7 @@ namespace SharpTerminal
                     separator = 0x0d;
                     break;
             }
-            buffer.Setup(readline, separator);
+            buffer.Setup(readline, standard, hexmode, separator);
         }
 
         private void IoClose()
@@ -385,6 +389,11 @@ namespace SharpTerminal
             UpdateReadline();
         }
 
+        private void CheckBoxStandard_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateReadline();
+        }
+
         private void TabControl_Selected(object sender, TabControlEventArgs e)
         {
             UpdateReadline();
@@ -395,7 +404,7 @@ namespace SharpTerminal
             UpdateReadline();
         }
 
-        private void timer_Tick(object sender, EventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             buffer.Update(richTextBoxLog);
         }
