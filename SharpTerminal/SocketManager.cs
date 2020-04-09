@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using System.Net.Sockets;
@@ -12,14 +13,19 @@ namespace SharpTerminal
 		private readonly ConcurrentQueue<byte[]> input;
         private readonly TcpClient socket;
         private readonly EndPoint endpoint;
-        private readonly Task reader;
-		
-		public SocketManager(string host, int port)
+		private readonly Sockets.Uri uri;
+		private readonly Stream stream;
+		private readonly Task reader;
+
+		public SocketManager(string uris, int port)
 		{
+			uri = new Sockets.Uri(uris);
 			input = new ConcurrentQueue<byte[]>();
 			//standalone app may be closed anytime so long timeout
-			socket = Sockets.ConnectWithTimeout(host, port, 1000);
-            endpoint = socket.Client.RemoteEndPoint;
+			socket = Sockets.ConnectWithTimeout(uri.HostOrIp, port, 1000);
+			if ("tcp" == uri.Protocol) stream = socket.GetStream();
+			if ("ssl" == uri.Protocol) stream = Sockets.SslWithTimeout(socket, 1000);
+			endpoint = socket.Client.RemoteEndPoint;
             socket.SendTimeout = 1000;
 			
 			reader = Task.Factory.StartNew(ReadLoop, TaskCreationOptions.LongRunning);
@@ -28,7 +34,8 @@ namespace SharpTerminal
 		public void Dispose()
 		{
 			Disposer.Dispose(socket);
-            Disposer.Dispose(reader);
+			Disposer.Dispose(stream);
+			Disposer.Dispose(reader);
         }
 
         public string Name
@@ -48,7 +55,6 @@ namespace SharpTerminal
 
         public void Write(byte[] bytes)
 		{
-			var stream = socket.GetStream();
 			stream.Write(bytes, 0, bytes.Length);
 		}
 		
@@ -63,7 +69,7 @@ namespace SharpTerminal
 
 				while(true)
 				{
-					var count = socket.GetStream().Read(bytes, 0, bytes.Length);
+					var count = stream.Read(bytes, 0, bytes.Length);
                     if (count <= 0) return;
 					var data = new byte[count];
 					Array.Copy(bytes, data, count);

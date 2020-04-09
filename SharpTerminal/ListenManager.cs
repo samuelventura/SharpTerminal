@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading;
 using System.Net;
@@ -12,16 +15,25 @@ namespace SharpTerminal
 	{
 		private readonly ConcurrentQueue<byte[]> input;
 		private readonly ConcurrentQueue<byte[]> output;
-        private readonly EndPoint endpoint;
-        private readonly Task accepter;
+		private readonly X509Certificate2 certificate;
+		private readonly EndPoint endpoint;
+		private readonly Sockets.Uri uri;
+		private readonly Task accepter;
 
-        private TcpListener listener;
+		private TcpListener listener;
 		
-		public ListenManager(string ip, int port, IRunner runner)
+		public ListenManager(string uris, int port, IRunner runner)
 		{
+			uri = new Sockets.Uri(uris);
+			if ("ssl" == uri.Protocol)
+			{
+				var certfile = Executable.Relative("SharpTerminal.pfx");
+				certificate = new X509Certificate2(certfile, "none");
+			}
+
 			input = new ConcurrentQueue<byte[]>();
 			output = new ConcurrentQueue<byte[]>();
-			listener = new TcpListener(IPAddress.Parse(ip), port);
+			listener = new TcpListener(IPAddress.Parse(uri.HostOrIp), port);
 			listener.Start();
             endpoint = listener.LocalEndpoint;
 
@@ -30,6 +42,7 @@ namespace SharpTerminal
 		
 		public void Dispose()
 		{
+			Disposer.Dispose(certificate);
 			Disposer.Close(listener);
             Disposer.Dispose(accepter);
         }
@@ -78,21 +91,28 @@ namespace SharpTerminal
 					Disposer.Dispose(writer);
 					current = client;
 					ClearOutput();
-					reader = Task.Factory.StartNew(()=>ReadLoop(client), TaskCreationOptions.LongRunning);
-					writer = Task.Factory.StartNew(()=>WriteLoop(client), TaskCreationOptions.LongRunning);
+					var stream = client.GetStream() as Stream;
+					if ("ssl" == uri.Protocol)
+					{
+						var ssl = new SslStream(client.GetStream());
+						ssl.AuthenticateAsServer(certificate);
+						stream = ssl;
+					}
+					reader = Task.Factory.StartNew(()=>ReadLoop(client, stream), TaskCreationOptions.LongRunning);
+					writer = Task.Factory.StartNew(()=>WriteLoop(client, stream), TaskCreationOptions.LongRunning);
 				}
 			}
 		}
 		
-		private void WriteLoop(TcpClient socket)
+		private void WriteLoop(TcpClient socket, Stream stream)
 		{
-			using(socket)
+			using (stream)
+			using (socket)
 			{
 				while(socket.Connected)
 				{
                     if (output.TryDequeue(out byte[] bytes))
                     {
-                        var stream = socket.GetStream();
                         stream.Write(bytes, 0, bytes.Length);
                     }
                     else Thread.Sleep(10);
@@ -100,15 +120,16 @@ namespace SharpTerminal
 			}
 		}
 		
-		private void ReadLoop(TcpClient socket)
+		private void ReadLoop(TcpClient socket, Stream stream)
 		{
+			using (stream)
 			using (socket)
 			{
 				var bytes = new byte[4096];
 
 				while(true)
 				{
-					var count = socket.GetStream().Read(bytes, 0, bytes.Length);
+					var count = stream.Read(bytes, 0, bytes.Length);
 					if (count <= 0) return;
 					var data = new byte[count];
 					Array.Copy(bytes, data, count);
