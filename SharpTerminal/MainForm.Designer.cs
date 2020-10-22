@@ -49,6 +49,9 @@ namespace SharpTerminal
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.terminalControl1 = new SharpTerminal.TerminalControl();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.shiftLeftToolStripButton = new System.Windows.Forms.ToolStripButton();
+            this.shiftRightToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStrip.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.tabControl.SuspendLayout();
@@ -62,6 +65,9 @@ namespace SharpTerminal
             this.cloneToolStripButton,
             this.renameToolStripButton,
             this.saveToolStripButton,
+            this.toolStripSeparator3,
+            this.shiftLeftToolStripButton,
+            this.shiftRightToolStripButton,
             this.toolStripSeparator1,
             this.exportAllToolStripButton,
             this.exportSelectedToolStripButton,
@@ -153,7 +159,7 @@ namespace SharpTerminal
             this.importToolStripButton.Name = "importToolStripButton";
             this.importToolStripButton.Size = new System.Drawing.Size(47, 22);
             this.importToolStripButton.Text = "Import";
-            this.importToolStripButton.ToolTipText = "Import Session from File";
+            this.importToolStripButton.ToolTipText = "Import Sessions from File";
             this.importToolStripButton.Click += new System.EventHandler(this.ImportToolStripButton_Click);
             // 
             // toolStripSeparator2
@@ -218,6 +224,33 @@ namespace SharpTerminal
             this.terminalControl1.Size = new System.Drawing.Size(743, 500);
             this.terminalControl1.TabIndex = 0;
             // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
+            // shiftLeftToolStripButton
+            // 
+            this.shiftLeftToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.shiftLeftToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("shiftLeftToolStripButton.Image")));
+            this.shiftLeftToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.shiftLeftToolStripButton.Name = "shiftLeftToolStripButton";
+            this.shiftLeftToolStripButton.Size = new System.Drawing.Size(42, 22);
+            this.shiftLeftToolStripButton.Text = "< Left";
+            this.shiftLeftToolStripButton.ToolTipText = "Shift Left";
+            this.shiftLeftToolStripButton.Click += new System.EventHandler(this.ShiftLeftToolStripButton_Click);
+            // 
+            // shiftRightToolStripButton
+            // 
+            this.shiftRightToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.shiftRightToolStripButton.Image = ((System.Drawing.Image)(resources.GetObject("shiftRightToolStripButton.Image")));
+            this.shiftRightToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.shiftRightToolStripButton.Name = "shiftRightToolStripButton";
+            this.shiftRightToolStripButton.Size = new System.Drawing.Size(50, 22);
+            this.shiftRightToolStripButton.Text = "Right >";
+            this.shiftRightToolStripButton.ToolTipText = "Shift Right";
+            this.shiftRightToolStripButton.Click += new System.EventHandler(this.ShiftRightToolStripButton_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -259,5 +292,8 @@ namespace SharpTerminal
         private System.Windows.Forms.TabPage tabPage1;
         private TerminalControl terminalControl1;
         private System.Windows.Forms.ToolStripButton saveToolStripButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripButton shiftLeftToolStripButton;
+        private System.Windows.Forms.ToolStripButton shiftRightToolStripButton;
     }
 }

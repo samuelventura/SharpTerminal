@@ -87,7 +87,7 @@ namespace SharpTerminal
 	
 		void MainFormLoad(object sender, EventArgs e)
 		{
-			Text = string.Format("SharpTerminal - 1.0.7 https://github.com/samuelventura/SharpTerminal");
+			Text = string.Format("SharpTerminal - 1.0.8 https://github.com/samuelventura/SharpTerminal");
 
             var sessions = sessionDao.Load();
 
@@ -212,6 +212,32 @@ namespace SharpTerminal
                     AddSession(session);
                 }
             }
+        }
+
+        private void ShiftLeftToolStripButton_Click(object sender, EventArgs e)
+        {
+            var selectedPage = tabControl.SelectedTab;
+            if (selectedPage == null) return;
+
+            var index = tabControl.SelectedIndex;
+            tabControl.TabPages.Remove(selectedPage);
+            index--;
+            if (index < 0) index = tabControl.TabPages.Count;
+            tabControl.TabPages.Insert(index, selectedPage);
+            tabControl.SelectedTab = selectedPage;
+        }
+
+        private void ShiftRightToolStripButton_Click(object sender, EventArgs e)
+        {
+            var selectedPage = tabControl.SelectedTab;
+            if (selectedPage == null) return;
+
+            var index = tabControl.SelectedIndex;
+            tabControl.TabPages.Remove(selectedPage);
+            index++;
+            if (index > tabControl.TabPages.Count) index = 0;
+            tabControl.TabPages.Insert(index, selectedPage);
+            tabControl.SelectedTab = selectedPage;
         }
     }
 }

@@ -3,7 +3,7 @@
 
 #define MyAppId "SharpTerminal"
 #define MyAppName "Sharp Terminal"
-#define MyAppVersion "1.0.7"
+#define MyAppVersion "1.0.8"
 #define MyAppPublisher "Samuel Ventura"
 #define MyAppURL "https://github.com/samuelventura/SharpTerminal"
 
