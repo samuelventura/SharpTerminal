@@ -10,7 +10,7 @@ namespace SharpTerminal
         private readonly string path;
         public string Name => "SharpTerminal";
         public string Ext => "SharpTerminal";
-        public string Title => "SharpTerminal - 1.0.10 https://github.com/samuelventura/SharpTerminal";
+        public string Title => "SharpTerminal - 1.0.11 https://github.com/samuelventura/SharpTerminal";
         public string Status => path;
         public Icon Icon => Resource.Icon;
 
@@ -19,20 +19,30 @@ namespace SharpTerminal
             this.path = path ?? SessionDao.DefaultPath(Name);
         }
 
-        public object[] Load()
+        public SessionDto[] Load()
         {
             return Load(path);
         }
 
-        public object[] Load(string path)
+        public SessionDto[] Load(string path)
         {
-            var dtos = SessionDao.Load<TerminalDto>(path);
-            foreach(var obj in dtos)
+            SessionDao.Exec(path, (db) =>
             {
-                var dto = obj as TerminalDto;
-                dto.Id = 0;
-            }
-            return dtos;
+                if (TabsTools.IsDebug())
+                {
+                    //force migration
+                    //db.Engine.UserVersion = 0;
+                }
+                //migration
+                if (db.Engine.UserVersion < 1)
+                {
+                    var assy = typeof(TerminalDto).Assembly.FullName;
+                    var type = typeof(TerminalDto).FullName;
+                    db.Engine.Run($"db.sessions.update _type='{type}, {assy}'");
+                    db.Engine.UserVersion = 1;
+                }
+            });
+            return SessionDao.Load<TerminalDto>(path);
         }
 
         public void Unload(Control obj)
@@ -41,19 +51,13 @@ namespace SharpTerminal
             control.Unload();
         }
 
-        public void Save(object[] dtos)
+        public void Save(SessionDto[] dtos)
         {
             Save(path, dtos);
         }
 
-        public void Save(string path, object[] dtos)
+        public void Save(string path, SessionDto[] dtos)
         {
-            var index = 0;
-            foreach (var obj in dtos)
-            {
-                var dto = obj as TerminalDto;
-                dto.Id = ++index; //1..
-            }
             SessionDao.Save(path, dtos);
         }
 
@@ -65,7 +69,7 @@ namespace SharpTerminal
             });
         }
 
-        public object Unwrap(Control obj)
+        public SessionDto Unwrap(Control obj)
         {
             var control = obj as TerminalControl;
             var dto = new TerminalDto 
@@ -76,7 +80,7 @@ namespace SharpTerminal
             return dto;
         }
 
-        public Control Wrap(object obj)
+        public Control Wrap(SessionDto obj)
         {
             var dto = obj as TerminalDto;
             var control = new TerminalControl

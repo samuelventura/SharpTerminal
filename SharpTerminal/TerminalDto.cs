@@ -1,9 +1,10 @@
 ﻿using System;
 using SharpTerminal.Tools;
+using SharpTabs;
 
 namespace SharpTerminal
 {
-	public class TerminalDto
+	public class TerminalDto : SessionDto
 	{
         public TerminalDto()
         {
@@ -15,15 +16,15 @@ namespace SharpTerminal
         public string Name { get; set; }
 
         public SerialSettings Serial { get; set; }
-        public string PortName { get; set; }
-		public string ClientHost { get; set; }
-        public int ClientPort { get; set; }
-        public string ServerIP { get; set; }
-        public int ServerPort { get; set; }
-        public string SendMode { get; set; }
+        public string PortName { get; set; } = "COM1";
+        public string ClientHost { get; set; } = "127.0.0.1";
+        public int ClientPort { get; set; } = 8000;
+        public string ServerIP { get; set; } = "127.0.0.1";
+        public int ServerPort { get; set; } = 8000;
+        public string SendMode { get; set; } = "Append CR+NL";
         public bool Standard { get; set; }
-        public bool Readline { get; set; }
-        public string ReadMode { get; set; }
+        public bool Readline { get; set; } = true;
+        public string ReadMode { get; set; } = "Break on NL";
         public string Text { get; set; }
         public string Text1 { get; set; }
         public string Text2 { get; set; }

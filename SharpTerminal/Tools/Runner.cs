@@ -17,18 +17,6 @@ namespace SharpTerminal.Tools
         private readonly Action idle;
         private readonly int delay;
 
-        public ThreadRunner(string name) : this(name, null, null, 0)
-        {
-        }
-
-        public ThreadRunner(string name, Action idle, int delay = 0) : this(name, null, idle, delay)
-        {
-        }
-
-        public ThreadRunner(string name, Action<Exception> catcher) : this(name, catcher, null, 0)
-        {
-        }
-
         public ThreadRunner(string name, Action<Exception> catcher, Action idle, int delay = 0)
         {
             this.catcher = catcher;
