@@ -10,7 +10,7 @@ namespace SharpTerminal
         private readonly string path;
         public string Name => "SharpTerminal";
         public string Ext => "SharpTerminal";
-        public string Title => "SharpTerminal - 1.0.9 https://github.com/samuelventura/SharpTerminal";
+        public string Title => "SharpTerminal - 1.0.10 https://github.com/samuelventura/SharpTerminal";
         public string Status => path;
         public Icon Icon => Resource.Icon;
 
