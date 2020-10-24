@@ -1,10 +1,11 @@
-﻿using SharpTerminal.Tools;
+﻿using System;
+using SharpTerminal.Tools;
 
 namespace SharpTerminal
 {
-	public class SessionSettings
+	public class TerminalDto
 	{
-        public SessionSettings()
+        public TerminalDto()
         {
             Serial = new SerialSettings();
             Name = "New Session";

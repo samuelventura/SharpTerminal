@@ -48,7 +48,7 @@ namespace SharpTerminal
             Link(buttonSendHex12, textBoxHexInput12);
         }
 
-        public void FromUI(SessionSettings config)
+        public void FromUI(TerminalDto config)
         {
             config.Serial.CopyFrom(serial);
             config.PortName = comboBoxSerial.Text;
@@ -88,16 +88,16 @@ namespace SharpTerminal
             config.Hex12 = textBoxHexInput12.Text;
         }
 
-        public void ToUI(SessionSettings config)
+        public void ToUI(TerminalDto config)
         {
             config.Serial.CopyTo(serial);
             comboBoxSerial.Text = config.PortName;
             numericUpDownClientPort.Value = config.ClientPort;
             numericUpDownServerPort.Value = config.ServerPort;
-            if (config.ClientHost != null) textBoxClientHost.Text = config.ClientHost;
-            if (config.ServerIP != null) comboBoxServerIP.Text = config.ServerIP;
-            if (config.SendMode != null) comboBoxSendMode.Text = config.SendMode;
-            if (config.ReadMode != null) comboBoxReadMode.Text = config.ReadMode;
+            textBoxClientHost.Text = config.ClientHost;
+            comboBoxServerIP.Text = config.ServerIP;
+            comboBoxSendMode.Text = config.SendMode;
+            comboBoxReadMode.Text = config.ReadMode;
             checkBoxReadline.Checked = config.Readline;
             checkBoxStandard.Checked = config.Standard;
             textBoxTextInput.Text = config.Text;
@@ -277,10 +277,6 @@ namespace SharpTerminal
         {
             uir = new ControlRunner(this);
             ior = new ThreadRunner("IO", IoException, IoIdle, 50);
-            if (comboBoxReadMode.SelectedIndex < 0) comboBoxReadMode.SelectedIndex = 0;
-            if (comboBoxSendMode.SelectedIndex < 0) comboBoxSendMode.SelectedIndex = 0;
-            if (comboBoxServerIP.SelectedIndex < 0) comboBoxServerIP.SelectedIndex = 0;
-            if (string.IsNullOrWhiteSpace(textBoxClientHost.Text)) textBoxClientHost.Text = "127.0.0.1";
             RefreshSerials();
             EnableControls(true);
             UpdateReadline();

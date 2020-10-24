@@ -216,7 +216,9 @@
             this.comboBoxServerIP.FormattingEnabled = true;
             this.comboBoxServerIP.Items.AddRange(new object[] {
             "127.0.0.1",
-            "0.0.0.0"});
+            "0.0.0.0",
+            "ssl:127.0.0.1",
+            "ssl:0.0.0.0"});
             this.comboBoxServerIP.Location = new System.Drawing.Point(35, 65);
             this.comboBoxServerIP.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxServerIP.Name = "comboBoxServerIP";
