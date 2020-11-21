@@ -7,9 +7,9 @@ using System.Text;
 namespace SharpTerminal
 {
     /* Cases to handle
-     * - In hex mode a flush ir required for packets > 255 bytes
-     * - In hex mode a flush ir required if silence for 100ms
-     * - In txt mode a flush ir required for packets > 255 bytes
+     * - In hex mode a flush is required for packets > 255 bytes
+     * - In hex mode a flush is required if silence for 100ms
+     * - In txt mode a flush is required for packets > 255 bytes
      */
 
     public class RichTextBuffer

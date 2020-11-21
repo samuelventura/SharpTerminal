@@ -10,13 +10,19 @@ namespace SharpTerminal
         private readonly string path;
         public string Name => "SharpTerminal";
         public string Ext => "SharpTerminal";
-        public string Title => "SharpTerminal - 1.0.11 https://github.com/samuelventura/SharpTerminal";
+        public string Title => "SharpTerminal - 1.0.12 https://github.com/samuelventura/SharpTerminal";
         public string Status => path;
         public Icon Icon => Resource.Icon;
+        public bool HasSetup => false;
 
         public TerminalFactory(string path)
         {
             this.path = path ?? SessionDao.DefaultPath(Name);
+        }
+
+        public void Setup(Control control)
+        {
+            throw new NotImplementedException();
         }
 
         public SessionDto[] Load()
@@ -26,22 +32,7 @@ namespace SharpTerminal
 
         public SessionDto[] Load(string path)
         {
-            SessionDao.Exec(path, (db) =>
-            {
-                if (TabsTools.IsDebug())
-                {
-                    //force migration
-                    //db.Engine.UserVersion = 0;
-                }
-                //migration
-                if (db.Engine.UserVersion < 1)
-                {
-                    var assy = typeof(TerminalDto).Assembly.FullName;
-                    var type = typeof(TerminalDto).FullName;
-                    db.Engine.Run($"db.sessions.update _type='{type}, {assy}'");
-                    db.Engine.UserVersion = 1;
-                }
-            });
+            SessionDao.Retype(path, 1, typeof(TerminalDto));
             return SessionDao.Load<TerminalDto>(path);
         }
 
@@ -65,7 +56,7 @@ namespace SharpTerminal
         {
             return Wrap(new TerminalDto
             {
-                Name = NewName()
+                Name = SessionDao.NewName()
             });
         }
 
@@ -86,18 +77,9 @@ namespace SharpTerminal
             var control = new TerminalControl
             {
                 Text = dto.Name,
-                Dock = DockStyle.Fill,
             };
             control.ToUI(dto);
             return control;
-        }
-
-        private static long count;
-
-        public static string NewName()
-        {
-            count++;
-            return $"Session {count}";
         }
     }
 }

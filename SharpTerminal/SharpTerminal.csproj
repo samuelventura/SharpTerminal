@@ -120,16 +120,17 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SharpTabs\SharpTabs\SharpTabs.csproj">
-      <Project>{6c455f54-3ba2-4a71-9564-981f26940fb1}</Project>
-      <Name>SharpTabs</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\Icon.ico" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <Content Include="README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SharpTabs\SharpTabs\SharpTabs.csproj">
+      <Project>{6c455f54-3ba2-4a71-9564-981f26940fb1}</Project>
+      <Name>SharpTabs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

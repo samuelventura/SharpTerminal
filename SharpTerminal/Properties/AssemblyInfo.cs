@@ -12,9 +12,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("SharpTerminal")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("samuel.ventura@yeico.com")]
 [assembly: AssemblyProduct("SharpTerminal")]
-[assembly: AssemblyCopyright("Copyright 2017 Samuel Ventura")]
+[assembly: AssemblyCompany("samuel.ventura@yeico.com")]
+[assembly: AssemblyCopyright("Copyright © 2020 Samuel Ventura")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
