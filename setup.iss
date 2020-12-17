@@ -36,8 +36,9 @@ Source: "{#MyAppId}\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recur
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
-Name: "{group}\{#MyAppName} {#MyAppVersion}"; Filename: "{app}\{#MyAppId}.exe";
-Name: "{commondesktop}\{#MyAppName} {#MyAppVersion}"; Filename: "{app}\{#MyAppId}.exe";
+Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppId}.exe";
+Name: "{commondesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppId}.exe";
+;Version in icon leaves previous link when upgrading
 
 [Registry]
 Root: HKCR; Subkey: ".SharpTerminal";                   ValueData: "{#MyAppName}";                     Flags: uninsdeletevalue; ValueType: string;  ValueName: ""
