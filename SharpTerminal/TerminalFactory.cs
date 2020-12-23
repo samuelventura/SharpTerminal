@@ -5,15 +5,17 @@ using SharpTabs;
 
 namespace SharpTerminal
 {
-    public class TerminalFactory : SessionFactory
+    public class TerminalFactory : ISessionFactory
     {
         private readonly string path;
         public string Name => "SharpTerminal";
         public string Ext => "SharpTerminal";
-        public string Title => "SharpTerminal - 1.0.12 https://github.com/samuelventura/SharpTerminal";
+        public string Title => $"SharpTerminal - {Version} {Home}";
         public string Status => path;
-        public Icon Icon => Resource.Icon;
+        public Icon Icon => TabsTools.ExeIcon();
         public bool HasSetup => false;
+        private string Version => Tools.Executable.VersionString();
+        private string Home => "https://github.com/samuelventura/SharpTerminal";
 
         public TerminalFactory(string path)
         {
@@ -25,12 +27,12 @@ namespace SharpTerminal
             throw new NotImplementedException();
         }
 
-        public SessionDto[] Load()
+        public ISessionDto[] Load()
         {
             return Load(path);
         }
 
-        public SessionDto[] Load(string path)
+        public ISessionDto[] Load(string path)
         {
             SessionDao.Retype(path, 1, typeof(TerminalDto));
             return SessionDao.Load<TerminalDto>(path);
@@ -42,12 +44,12 @@ namespace SharpTerminal
             control.Unload();
         }
 
-        public void Save(SessionDto[] dtos)
+        public void Save(ISessionDto[] dtos)
         {
             Save(path, dtos);
         }
 
-        public void Save(string path, SessionDto[] dtos)
+        public void Save(string path, ISessionDto[] dtos)
         {
             SessionDao.Save(path, dtos);
         }
@@ -60,7 +62,7 @@ namespace SharpTerminal
             });
         }
 
-        public SessionDto Unwrap(Control obj)
+        public ISessionDto Unwrap(Control obj)
         {
             var control = obj as TerminalControl;
             var dto = new TerminalDto 
@@ -71,7 +73,7 @@ namespace SharpTerminal
             return dto;
         }
 
-        public Control Wrap(SessionDto obj)
+        public Control Wrap(ISessionDto obj)
         {
             var dto = obj as TerminalDto;
             var control = new TerminalControl

@@ -4,7 +4,7 @@ using SharpTabs;
 
 namespace SharpTerminal
 {
-	public class TerminalDto : SessionDto
+	public class TerminalDto : ISessionDto
 	{
         public TerminalDto()
         {
