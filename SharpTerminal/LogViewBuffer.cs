@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Drawing;
 using System.Text;
+using SharpLogger;
 
 namespace SharpTerminal
 {
@@ -12,7 +12,7 @@ namespace SharpTerminal
      * - In txt mode a flush is required for packets > 255 bytes
      */
 
-    public class RichTextBuffer
+    public class LogViewBuffer
     {
         private const int SILENCE_TO = 100;
         private const int MAX_LENGTH = 256;
@@ -134,7 +134,7 @@ namespace SharpTerminal
 
         public void Input(byte[] bytes)
         {
-            foreach(var b in bytes)
+            foreach (var b in bytes)
             {
                 current.Bytes.Add(b);
                 if (current.Readline)
@@ -146,13 +146,13 @@ namespace SharpTerminal
             current.Last = DateTime.Now;
         }
 
-        public void Update(RichTextBox rtb)
+        public void Update(LogView lv)
         {
-            while(lines.Count > 0)
+            while (lines.Count > 0)
             {
                 var line = lines.Dequeue();
-                var text = line.Standard ? line.Text : line.Readable; 
-                var now = line.Standard && !line.Hexmode ? null as DateTime?: line.Now;
+                var text = line.Standard ? line.Text : line.Readable;
+                var now = line.Standard && !line.Hexmode ? null as DateTime? : line.Now;
                 var showhex = line.Hexmode || !line.Standard;
 
                 var color = Color.White;
@@ -160,45 +160,44 @@ namespace SharpTerminal
                 {
                     case "input":
                         color = Color.DodgerBlue;
-                        if (line.Readline) Add(rtb, color, now, text);
-                        if (showhex) Add(rtb, line.Hexmode ? color : Color.Gray, now, line.Hexadecimal);
+                        if (line.Readline) Add(lv, color, now, text);
+                        if (showhex) Add(lv, line.Hexmode ? color : Color.Gray, now, line.Hexadecimal);
                         break;
                     case "output":
                         color = Color.Salmon;
-                        if (line.Readline) Add(rtb, color, now, text);
-                        if (showhex) Add(rtb, line.Hexmode ? color : Color.Gray, now, line.Hexadecimal);
+                        if (line.Readline) Add(lv, color, now, text);
+                        if (showhex) Add(lv, line.Hexmode ? color : Color.Gray, now, line.Hexadecimal);
                         break;
                     case "success":
                         color = Color.LimeGreen;
-                        Add(rtb, color, now, text);
+                        Add(lv, color, now, text);
                         break;
                     case "error":
                         color = Color.OrangeRed;
-                        Add(rtb, color, now, text);
+                        Add(lv, color, now, text);
                         break;
                     case "warn":
                         color = Color.Yellow;
-                        Add(rtb, color, now, text);
+                        Add(lv, color, now, text);
                         break;
                 }
             }
         }
 
-        public void Add(RichTextBox rtb, Color color, DateTime? now, string line)
+        public void Add(LogView lv, Color color, DateTime? now, string line)
         {
-            rtb.SelectionLength = 0; //clear selection
-            rtb.SelectionStart = rtb.Text.Length;
+            var sb = new StringBuilder();
             if (now.HasValue)
             {
-                rtb.SelectionColor = Color.Gray;
-                rtb.AppendText(now.Value.ToString("HH:mm:ss.fff"));
-                rtb.AppendText(" ");
+                sb.Append(now.Value.ToString("HH:mm:ss.fff"));
+                sb.Append(" ");
             }
-            rtb.SelectionColor = color;
-            rtb.AppendText(line);
-            rtb.AppendText("\n");
-            rtb.SelectionStart = rtb.Text.Length;
-            rtb.ScrollToCaret();
+            sb.Append(line);
+            lv.Append(new LogLine()
+            {
+                Color = color,
+                Line = sb.ToString(),
+            });
         }
     }
 

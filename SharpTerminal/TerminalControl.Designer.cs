@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.panelLeft = new System.Windows.Forms.Panel();
-            this.richTextBoxLog = new System.Windows.Forms.RichTextBox();
+            this.logView = new SharpTerminal.LogView();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.comboBoxServerIP = new System.Windows.Forms.ComboBox();
             this.buttonClear = new System.Windows.Forms.Button();
@@ -148,7 +148,7 @@
             // 
             // panelLeft
             // 
-            this.panelLeft.Controls.Add(this.richTextBoxLog);
+            this.panelLeft.Controls.Add(this.logView);
             this.panelLeft.Controls.Add(this.tableLayoutPanelMain);
             this.panelLeft.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelLeft.Location = new System.Drawing.Point(0, 0);
@@ -159,17 +159,15 @@
             // 
             // richTextBoxLog
             // 
-            this.richTextBoxLog.BackColor = System.Drawing.Color.Black;
-            this.richTextBoxLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBoxLog.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBoxLog.ForeColor = System.Drawing.Color.White;
-            this.richTextBoxLog.Location = new System.Drawing.Point(0, 91);
-            this.richTextBoxLog.Margin = new System.Windows.Forms.Padding(2);
-            this.richTextBoxLog.Name = "richTextBoxLog";
-            this.richTextBoxLog.ReadOnly = true;
-            this.richTextBoxLog.Size = new System.Drawing.Size(504, 657);
-            this.richTextBoxLog.TabIndex = 16;
-            this.richTextBoxLog.Text = "";
+            this.logView.BackColor = System.Drawing.Color.Black;
+            this.logView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logView.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.logView.ForeColor = System.Drawing.Color.White;
+            this.logView.Location = new System.Drawing.Point(0, 91);
+            this.logView.Margin = new System.Windows.Forms.Padding(2);
+            this.logView.Name = "logView";
+            this.logView.Size = new System.Drawing.Size(504, 657);
+            this.logView.TabIndex = 16;
             // 
             // tableLayoutPanelMain
             // 
@@ -1208,7 +1206,7 @@
 
         private System.Windows.Forms.SplitContainer splitContainer;
         private System.Windows.Forms.Panel panelLeft;
-        private System.Windows.Forms.RichTextBox richTextBoxLog;
+        private SharpTerminal.LogView logView;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;
         private System.Windows.Forms.ComboBox comboBoxServerIP;
         private System.Windows.Forms.Button buttonClear;

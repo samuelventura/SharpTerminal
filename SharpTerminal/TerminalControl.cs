@@ -11,7 +11,7 @@ namespace SharpTerminal
     {
         private readonly ASCIIEncoding ascii = new ASCIIEncoding();
         private readonly SerialSettings serial = new SerialSettings();
-        private RichTextBuffer buffer = new RichTextBuffer();
+        private LogViewBuffer buffer = new LogViewBuffer();
         private IoManager iom = new NopManager();
         private ThreadRunner ior;
         private ControlRunner uir;
@@ -227,7 +227,8 @@ namespace SharpTerminal
         {
             Disposer.Dispose(iom);
             iom = new NopManager();
-            uir.Run(() => {
+            uir.Run(() =>
+            {
                 buffer.Flush();
                 EnableControls(true);
             });
@@ -299,7 +300,8 @@ namespace SharpTerminal
         {
             var name = comboBoxSerial.Text;
             EnableControls(false);
-            ior.Run(() => {
+            ior.Run(() =>
+            {
                 iom = new SerialManager(name, serial);
                 uir.Run(() => buffer.Log("success", "Serial {0} open", iom.Name));
             });
@@ -310,7 +312,8 @@ namespace SharpTerminal
             var host = textBoxClientHost.Text;
             var port = (int)numericUpDownClientPort.Value;
             EnableControls(false);
-            ior.Run(() => {
+            ior.Run(() =>
+            {
                 iom = new SocketManager(host, port);
                 uir.Run(() => buffer.Log("success", "Socket {0} open", iom.Name));
             });
@@ -321,7 +324,8 @@ namespace SharpTerminal
             var ip = comboBoxServerIP.Text;
             var port = (int)numericUpDownServerPort.Value;
             EnableControls(false);
-            ior.Run(() => {
+            ior.Run(() =>
+            {
                 iom = new ListenManager(ip, port, ior);
                 uir.Run(() => buffer.Log("success", "Listener {0} open", iom.Name));
             });
@@ -334,7 +338,7 @@ namespace SharpTerminal
 
         private void ButtonClear_Click(object sender, EventArgs e)
         {
-            richTextBoxLog.Clear();
+            logView.Clear();
         }
 
         private void ButtonSendText_Click(object sender, EventArgs e)
@@ -402,7 +406,7 @@ namespace SharpTerminal
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            buffer.Update(richTextBoxLog);
+            buffer.Update(logView);
         }
     }
 }
