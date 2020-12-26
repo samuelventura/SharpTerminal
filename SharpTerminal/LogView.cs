@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows.Forms;
 using SharpLogger;
 
@@ -7,12 +8,31 @@ namespace SharpTerminal
 {
     public partial class LogView : LogPanel
     {
+        private static readonly LogDebug debugger = new LogDebug(typeof(LogView).Name);
+        private const int WM_VSCROLL = 0x115;
+        private const int WM_HSCROLL = 0x114;
+        private const int WM_MOUSEWHEEL = 0x020A;
+        private const int WM_LBUTTONDOWN = 0x0201;
         private readonly LinkedList<LogLine> shown = new LinkedList<LogLine>();
         private readonly LinkedList<LogLine> queue = new LinkedList<LogLine>();
         private readonly Timer timer = new Timer();
 
-        private readonly int limit = 10000;
+        private int limit = 1000;
         private bool dirty;
+        private bool freeze;
+
+        [Category("Logging")]
+        public int LineLimit
+        {
+            get { return limit; }
+            set { limit = value; }
+        }
+        [Category("Logging")]
+        public int PollPeriod
+        {
+            get { return timer.Interval; }
+            set { timer.Interval = value; }
+        }
 
         public LogView()
         {
@@ -31,18 +51,32 @@ namespace SharpTerminal
 
         public void Clear()
         {
+            freeze = false;
             shown.Clear();
             SetLines();
         }
 
-        private LogLine[] Pop()
+        //temporary.. find a better more explicit way
+        protected override void WndProc(ref Message m)
         {
-            lock (queue)
+            base.WndProc(ref m);
+            switch (m.Msg)
             {
-                var array = new LogLine[queue.Count];
-                queue.CopyTo(array, 0);
-                queue.Clear();
-                return array;
+                case WM_VSCROLL:
+                case WM_HSCROLL:
+                case WM_MOUSEWHEEL:
+                case WM_LBUTTONDOWN:
+                    freeze = true;
+                    break;
+            }
+        }
+
+        protected override void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
+        {
+            base.OnPreviewKeyDown(e);
+            if (e.KeyCode == Keys.Escape)
+            {
+                freeze = false;
             }
         }
 
@@ -59,7 +93,7 @@ namespace SharpTerminal
                 shown.RemoveFirst();
                 dirty = true;
             }
-            if (dirty)
+            if (dirty && !freeze)
             {
                 SetLines(Shown());
                 dirty = false;
@@ -67,11 +101,22 @@ namespace SharpTerminal
             timer.Enabled = true;
         }
 
+        private LogLine[] Pop()
+        {
+            lock (queue)
+            {
+                var array = new LogLine[queue.Count];
+                queue.CopyTo(array, 0);
+                queue.Clear();
+                return array;
+            }
+        }
+
         private LogLine[] Shown()
         {
-            var list = new List<LogLine>();
-            foreach (var line in shown) list.Add(line);
-            return list.ToArray();
+            var array = new LogLine[shown.Count];
+            shown.CopyTo(array, 0);
+            return array;
         }
     }
 }

@@ -14,7 +14,7 @@ namespace SharpTerminal
         public string Status => path;
         public Icon Icon => TabsTools.ExeIcon();
         public bool HasSetup => false;
-        private string Version => Tools.Executable.VersionString();
+        private string Version => TabsTools.Version();
         private string Home => "https://github.com/samuelventura/SharpTerminal";
 
         public TerminalFactory(string path)
@@ -65,9 +65,9 @@ namespace SharpTerminal
         public ISessionDto Unwrap(Control obj)
         {
             var control = obj as TerminalControl;
-            var dto = new TerminalDto 
-            { 
-                Name = control.Text 
+            var dto = new TerminalDto
+            {
+                Name = control.Text
             };
             control.FromUI(dto);
             return dto;
